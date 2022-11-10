@@ -1,0 +1,62 @@
+-SECGEN-
+SecGen is a tool designed to generate a sector of a galaxy, either as a rollplaying tool, or to help with world building.
+
+-Features-
+Randomly generate a sector of space based on a series of lists containting appropriate names and qualities of astral bodies.
+The sector is stored as a database with a "stars" table and a "planets" table
+
+    -Main Window
+    In the main window there are two primary views, the "Sector View" and the "System View". Both are labeled frames containing grids of images.
+
+        -Sector View
+        The sector view contains a grid of images representing either empty space or a star. The stars come from a table called "stars" which
+        contains their names and attributes.
+
+        Clicking on a grid coordinate should pull up the associated system in the system view.
+
+        -System View
+        The system view contains a packed group of images with the system's star at the top and then its planets below it, in order of how far
+        they are from the star.
+        
+        Clicking on a planet should pull up info in an info panel, below the systme view. Planet information is pulled from a the "planets" table.
+
+    -Save and Load Sectors
+
+        -Load
+        Sectors (databases) should be savable for later use, and loaded either from a list, or a file selector
+    
+    -Edit Star/Planet
+
+        -Edit
+        All data should be in text, and editable by user. There will be an "edit star" and an "edit system" button, either of which will pull up a menu
+        allowing for changes to a given item.
+
+
+-Necessary Files-
+
+    -DataBase: Sector [Name]
+        -Table: stars
+            - name
+            - row
+            - column
+            - size
+        -Table: planets
+            - name
+            - size
+            - average temperature
+            - humidity
+            - life
+            - notable trait
+
+-To Do List-
+    - Create basic console view
+    - Generate sector (stars table)
+    - Generate systems (planets table)
+    - have console represent tables
+    - Edit button and menu for stars
+    - edit button and menu for planets
+    - save/load sectors menu
+    - create icons
+        - empty space
+        - stars (small, mid, large)
+        - planets (small, mid, large)
