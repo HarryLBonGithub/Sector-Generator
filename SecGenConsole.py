@@ -5,7 +5,7 @@ from tkinter import messagebox
 selectedRow = "0"
 selectedColumn = "0"
 
-currentSector = "default"
+currentSector = ""
 
 #root window setup
 rootWindow = Tk()
@@ -18,6 +18,8 @@ def editStar():
 def editPlanet():
     pass
 
+def openSector():
+    pass
 
 #console object creation
 sectorMapFrame = LabelFrame(rootWindow, text="Sector Map", labelanchor=N)
@@ -36,6 +38,8 @@ fillerLabel4 = Label(planetInfoFrame,text="Hello!")
 
 editPlanetButton = Button(rootWindow, text="Edit Planet", command=editPlanet)
 
+openSectorButton = Button(rootWindow, text="OPEN SECTOR", command=openSector)
+
 #console object display
 sectorMapFrame.grid(row=0, column=0,padx=10,pady=10, columnspan=2)
 fillerLabel.pack()
@@ -52,5 +56,7 @@ planetInfoFrame.grid(row=1, column=2,padx=10,pady=10)
 fillerLabel4.pack()
 
 editPlanetButton.grid(row=1,column=3,padx=10,pady=10)
+
+openSectorButton.grid(row=2,column=0, pady = 10, columnspan=4)
 
 rootWindow.mainloop()
