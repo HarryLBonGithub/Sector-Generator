@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
+import SecGenFunctions
 
 #variables
 selectedRow = "0"

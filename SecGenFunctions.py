@@ -2,9 +2,8 @@ import SecGenSources
 import sqlite3
 import random
 
-tempDBName = "default"
 tempStarNumber = 5
-tempGridSize = 5
+tempGridSize = 10
 
 def generateSector(sectorName, numberOfStars, gridSize):
 
@@ -20,12 +19,34 @@ def generateSector(sectorName, numberOfStars, gridSize):
 
     #populate stars table
     for _ in range(numberOfStars):
+
         newStarName = random.choice(SecGenSources.starNames)
+
+        while newStarName in usedStarNames:
+            newStarName = random.choice(SecGenSources.starNames)
+        
+        usedStarNames.append(newStarName)
+
+
         newStarSize = random.choice(SecGenSources.starSizes)
+
+        newRow = str(random.randrange(1, gridSize+1))
+        newColumn = str(random.randrange(1, gridSize+1))
+        newCoordinates = newRow + newColumn
+
+        while newCoordinates in usedSectorCoordinates:
+            newRow = str(random.randrange(1, gridSize+1))
+            newColumn = str(random.randrange(1, gridSize+1))
+            newCoordinates = newRow + newColumn
+        
+        # print("Star: " + newStarName +" Size: " + newStarSize + " Sec X: " + newColumn + " Sec Y: " + newRow)
+
+        cursor.execute("INSERT INTO stars VALUES (?,?,?,?)", (newStarName, newStarSize, newRow,newColumn))
 
     #create planets table
     cursor.execute("""
         CREATE TABLE planets (
+            star text,
             name text,
             size text,
             average_temp text,
@@ -33,9 +54,37 @@ def generateSector(sectorName, numberOfStars, gridSize):
             life text,
             note text)
         """)
+    
+    #populate planets table
+
+    #Create a list of stars
+    cursor.execute("SELECT name FROM stars")
+    sectorStars = [i[0] for i in cursor.fetchall()]
+    print(sectorStars)
+
+    #create planets for each star
+    for star in sectorStars:
+        numberOfPlanets = random.randrange(1,11)
+        for planet in range(0, numberOfPlanets):
+            
+            newPlanetStar = star
+
+            newPlanetName = star +"-"+SecGenSources.planetSuffixes[planet]
+
+            newPlanetSize = random.choice(SecGenSources.planetSizes)
+            newPlanetTemp = random.choice(SecGenSources.planetTemp)
+            newPlanetHumidity = random.choice(SecGenSources.planetHumidity)
+            newPlanetLife = random.choice(SecGenSources.planetLifeSigns)
+            newPlanetNote = random.choice(SecGenSources.planetNote)
+
+            cursor.execute("INSERT INTO planets VALUES (?,?,?,?,?,?,?)", 
+            (newPlanetStar, newPlanetName, newPlanetSize, newPlanetTemp, newPlanetHumidity,newPlanetLife,newPlanetNote))
+
+
 
     sector.commit()
     sector.close()
 
+tempDBName = input("Sector Name: ")
 
 generateSector(tempDBName, tempStarNumber, tempGridSize)
