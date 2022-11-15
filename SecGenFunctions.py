@@ -27,7 +27,6 @@ def generateSector(sectorName, numberOfStars, gridSize):
         
         usedStarNames.append(newStarName)
 
-
         newStarSize = random.choice(SecGenSources.starSizes)
 
         newRow = str(random.randrange(1, gridSize+1))
@@ -39,9 +38,10 @@ def generateSector(sectorName, numberOfStars, gridSize):
             newColumn = str(random.randrange(1, gridSize+1))
             newCoordinates = newRow + newColumn
         
-        # print("Star: " + newStarName +" Size: " + newStarSize + " Sec X: " + newColumn + " Sec Y: " + newRow)
+        print("Star: " + newStarName +" Size: " + newStarSize + " Sec X: " + newColumn + " Sec Y: " + newRow)
 
         cursor.execute("INSERT INTO stars VALUES (?,?,?,?)", (newStarName, newStarSize, newRow,newColumn))
+        sector.commit()
 
     #create planets table
     cursor.execute("""
@@ -60,7 +60,6 @@ def generateSector(sectorName, numberOfStars, gridSize):
     #Create a list of stars
     cursor.execute("SELECT name FROM stars")
     sectorStars = [i[0] for i in cursor.fetchall()]
-    print(sectorStars)
 
     #create planets for each star
     for star in sectorStars:
@@ -79,12 +78,7 @@ def generateSector(sectorName, numberOfStars, gridSize):
 
             cursor.execute("INSERT INTO planets VALUES (?,?,?,?,?,?,?)", 
             (newPlanetStar, newPlanetName, newPlanetSize, newPlanetTemp, newPlanetHumidity,newPlanetLife,newPlanetNote))
-
-
+            sector.commit()
 
     sector.commit()
     sector.close()
-
-tempDBName = input("Sector Name: ")
-
-generateSector(tempDBName, tempStarNumber, tempGridSize)

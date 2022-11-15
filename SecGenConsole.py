@@ -13,6 +13,41 @@ rootWindow = Tk()
 rootWindow.title("SecGen")
 
 #functions
+def newSectorWindow():
+
+    def createSector():
+        if sizeSelection.get() == "Small":
+            gridNumber = 5
+            starNumber = 5
+            SecGenFunctions.generateSector(newSecNameInput.get(), starNumber, gridNumber)
+        elif sizeSelection.get() == "Medium":
+            gridNumber = 10
+            starNumber = 10
+            SecGenFunctions.generateSector(newSecNameInput.get(), starNumber, gridNumber)
+        elif sizeSelection.get() == "Large":
+            gridNumber = 15
+            starNumber = 15
+            SecGenFunctions.generateSector(newSecNameInput.get(), starNumber, gridNumber)
+        
+    newSectorCreator = Toplevel()
+    newNamePrompt = Label(newSectorCreator, text="Sector Name: ")
+    newSecNameInput = Entry(newSectorCreator,width=20)
+    newSecConfirmButton = Button(newSectorCreator,text="Confirm", command=createSector)
+
+    sizeSelectionPrompt = Label(newSectorCreator, text="Size: ")
+    sizeSelection = StringVar()
+    sizeSelection.set("Medium")
+    newSecSize = OptionMenu(newSectorCreator, sizeSelection, "Small", "Medium", "Large")
+
+    newNamePrompt.grid(row=0, column=0, padx=10, pady=10)
+    newSecNameInput.grid(row=0, column=1, padx=10,pady=10)
+    sizeSelectionPrompt.grid(row=0,column=2)
+    newSecSize.grid(row=0, column=3, padx=10)
+    newSecConfirmButton.grid(row=1)
+
+def openSectorWindow():
+    pass
+
 def editStar():
     pass
 
@@ -39,7 +74,8 @@ fillerLabel4 = Label(planetInfoFrame,text="Hello!")
 
 editPlanetButton = Button(rootWindow, text="Edit Planet", command=editPlanet)
 
-openSectorButton = Button(rootWindow, text="OPEN SECTOR", command=openSector)
+openSectorWindowButton = Button(rootWindow, text="OPEN SECTOR", command=openSectorWindow)
+newSectorWindowButton = Button(rootWindow, text="NEW SECTOR",command=newSectorWindow)
 
 #console object display
 sectorMapFrame.grid(row=0, column=0,padx=10,pady=10, columnspan=2)
@@ -58,6 +94,7 @@ fillerLabel4.pack()
 
 editPlanetButton.grid(row=1,column=3,padx=10,pady=10)
 
-openSectorButton.grid(row=2,column=0, pady = 10, columnspan=4)
+openSectorWindowButton.grid(row=2,column=0, pady = 10, columnspan=2)
+newSectorWindowButton.grid(row=2, column=2,pady=10, columnspan=2)
 
 rootWindow.mainloop()
