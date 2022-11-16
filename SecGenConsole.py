@@ -33,6 +33,7 @@ def newSectorWindow():
             SecGenFunctions.generateSector(newSecNameInput.get(), starNumber, gridNumber)
         
         currentSector = newSecNameInput.get()
+        sectorMapFrame.config(text="Sector Map: " + currentSector)
         newSectorCreator.destroy()
         
     newSectorCreator = Toplevel()
@@ -53,33 +54,31 @@ def newSectorWindow():
 
 def openSectorWindow():
 
-    def loadSector(name):
-        pass
-    def deleteSector(name):
-        pass
-    
-    sectorLabels = []
-    loadButtons = []
-    deleteButtons = []
+    def loadSector():
+        currentSector = sectorSelection.get()
+        sectorMapFrame.config(text="Sector Map: " + currentSector)
+        loadSectorWindow.destroy()
+
+    def deleteSector():
+        os.remove('sectors/' + sectorSelection.get())
+        sectorMapFrame.config(text="Sector Map: ")
+        loadSectorWindow.destroy()
+        #needs a way to update the options menu without the deleted sector
 
     loadSectorWindow = Toplevel()
 
     sectorsList = os.listdir('sectors')
-    
-    for sec in range(len(sectorsList)):
 
-        sectorLabels.append(Label(loadSectorWindow, text=sectorsList[sec]))
-        sectorLabels[sec].grid(row=sec, column=0)
+    sectorSelection = StringVar()
+    sectorSelection.set(sectorsList[0])
+    sectorOptions = OptionMenu(loadSectorWindow, sectorSelection, *sectorsList)
 
-        loadButtons.append(Button(loadSectorWindow,text="Load",command=loadSector))
-        loadButtons[sec].grid(row=sec, column = 1)
+    loadSectorButton = Button(loadSectorWindow,text="Load",command=loadSector)
+    deleteSectorButton = Button(loadSectorWindow,text="Delete",command=deleteSector)
 
-        deleteButtons.append(Button(loadSectorWindow,text="Delete",command=loadSector))
-        deleteButtons[sec].grid(row=sec, column = 2)
-
-
-        
-        
+    sectorOptions.grid(row=0, column=0)
+    loadSectorButton.grid(row=0, column=1)
+    deleteSectorButton.grid(row=0,column=2)
 
 def editStar():
     pass
@@ -91,7 +90,7 @@ def openSector():
     pass
 
 #console object creation
-sectorMapFrame = LabelFrame(rootWindow, text="Sector Map", labelanchor=N)
+sectorMapFrame = LabelFrame(rootWindow, text="Sector Map: " + currentSector, labelanchor=N)
 fillerLabel = Label(sectorMapFrame,text="Hello!")
 
 systemMapFrame = LabelFrame(rootWindow, text="System Map", labelanchor=N)
