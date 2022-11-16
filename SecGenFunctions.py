@@ -38,7 +38,7 @@ def generateSector(sectorName, numberOfStars, gridSize):
             newColumn = str(random.randrange(1, gridSize+1))
             newCoordinates = newRow + newColumn
         
-        print("Star: " + newStarName +" Size: " + newStarSize + " Sec X: " + newColumn + " Sec Y: " + newRow)
+        #print("Star: " + newStarName +" Size: " + newStarSize + " Sec X: " + newColumn + " Sec Y: " + newRow)
 
         cursor.execute("INSERT INTO stars VALUES (?,?,?,?)", (newStarName, newStarSize, newRow,newColumn))
         sector.commit()

@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 import SecGenFunctions
+import os
 
 #variables
 selectedRow = "0"
@@ -16,6 +17,8 @@ rootWindow.title("SecGen")
 def newSectorWindow():
 
     def createSector():
+        global currentSector
+
         if sizeSelection.get() == "Small":
             gridNumber = 5
             starNumber = 5
@@ -28,6 +31,9 @@ def newSectorWindow():
             gridNumber = 15
             starNumber = 15
             SecGenFunctions.generateSector(newSecNameInput.get(), starNumber, gridNumber)
+        
+        currentSector = newSecNameInput.get()
+        newSectorCreator.destroy()
         
     newSectorCreator = Toplevel()
     newNamePrompt = Label(newSectorCreator, text="Sector Name: ")
@@ -46,7 +52,34 @@ def newSectorWindow():
     newSecConfirmButton.grid(row=1)
 
 def openSectorWindow():
-    pass
+
+    def loadSector(name):
+        pass
+    def deleteSector(name):
+        pass
+    
+    sectorLabels = []
+    loadButtons = []
+    deleteButtons = []
+
+    loadSectorWindow = Toplevel()
+
+    sectorsList = os.listdir('sectors')
+    
+    for sec in range(len(sectorsList)):
+
+        sectorLabels.append(Label(loadSectorWindow, text=sectorsList[sec]))
+        sectorLabels[sec].grid(row=sec, column=0)
+
+        loadButtons.append(Button(loadSectorWindow,text="Load",command=loadSector))
+        loadButtons[sec].grid(row=sec, column = 1)
+
+        deleteButtons.append(Button(loadSectorWindow,text="Delete",command=loadSector))
+        deleteButtons[sec].grid(row=sec, column = 2)
+
+
+        
+        
 
 def editStar():
     pass
