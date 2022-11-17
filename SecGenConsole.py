@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 import SecGenFunctions
 import os
+import functools #for .partial(command, arg)
 
 #variables
 selectedRow = "0"
@@ -32,7 +33,7 @@ def newSectorWindow():
             starNumber = 15
             SecGenFunctions.generateSector(newSecNameInput.get(), starNumber, gridNumber)
         
-        currentSector = newSecNameInput.get()
+        currentSector = str(newSecNameInput.get() + ".db")
         sectorMapFrame.config(text="Sector Map: " + currentSector)
         newSectorCreator.destroy()
         
@@ -88,6 +89,10 @@ def editPlanet():
 
 def openSector():
     pass
+
+def createSectorMap():
+    pass
+
 
 #console object creation
 sectorMapFrame = LabelFrame(rootWindow, text="Sector Map: " + currentSector, labelanchor=N)
