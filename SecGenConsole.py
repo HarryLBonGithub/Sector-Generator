@@ -3,6 +3,7 @@ from tkinter import messagebox
 import SecGenFunctions
 import os
 import functools #for .partial(command, arg)
+import sqlite3
 
 #variables
 selectedRow = "0"
@@ -13,6 +14,12 @@ currentSector = ""
 #root window setup
 rootWindow = Tk()
 rootWindow.title("SecGen")
+
+#preload images
+starFieldIcon = PhotoImage(file=r'images\Stars64.png')
+smallStarIcon = PhotoImage(file=r'images\Star_Small_64.png')
+midStarIcon = PhotoImage(file=r'images\Star_Mid_64.png')
+largeStarIcon =PhotoImage(file=r'images\Star_Large_64.png')
 
 #functions
 def newSectorWindow():
@@ -36,6 +43,7 @@ def newSectorWindow():
         currentSector = str(newSecNameInput.get() + ".db")
         sectorMapFrame.config(text="Sector Map: " + currentSector)
         newSectorCreator.destroy()
+        createSectorMap()
         
     newSectorCreator = Toplevel()
     newNamePrompt = Label(newSectorCreator, text="Sector Name: ")
@@ -56,12 +64,17 @@ def newSectorWindow():
 def openSectorWindow():
 
     def loadSector():
+        global currentSector
+
         currentSector = sectorSelection.get()
         sectorMapFrame.config(text="Sector Map: " + currentSector)
         loadSectorWindow.destroy()
 
+        createSectorMap()
+
+
     def deleteSector():
-        os.remove('sectors/' + sectorSelection.get())
+        os.remove('sectors/' + str(sectorSelection.get()))
         sectorMapFrame.config(text="Sector Map: ")
         loadSectorWindow.destroy()
         #needs a way to update the options menu without the deleted sector
@@ -91,12 +104,31 @@ def openSector():
     pass
 
 def createSectorMap():
-    pass
+    sector = sqlite3.connect('sectors/' + currentSector)
+    cursor = sector.cursor()
+    cursor.execute('SELECT * FROM stars')
+    sectorStars = cursor.fetchall()
 
+    numberOfStars = len(sectorStars)
+
+    sectorMapButtons = []
+    buttonCounter = 0
+
+    for r in range(numberOfStars):
+        for c in range(numberOfStars):
+            newSectorButton = Button(sectorMapFrame, image=starFieldIcon)
+            sectorMapButtons.append(newSectorButton)
+            sectorMapButtons[buttonCounter].grid(row=r, column=c)
+            buttonCounter += 1
+
+
+
+    print(sectorStars)
+    print(numberOfStars)
+    sector.close()
 
 #console object creation
-sectorMapFrame = LabelFrame(rootWindow, text="Sector Map: " + currentSector, labelanchor=N)
-fillerLabel = Label(sectorMapFrame,text="Hello!")
+sectorMapFrame = LabelFrame(rootWindow, text="Sector Map: " + currentSector, labelanchor=N,padx=5, pady=5)
 
 systemMapFrame = LabelFrame(rootWindow, text="System Map", labelanchor=N)
 fillerLabel2 = Label(systemMapFrame,text="Hello!")
@@ -116,7 +148,6 @@ newSectorWindowButton = Button(rootWindow, text="NEW SECTOR",command=newSectorWi
 
 #console object display
 sectorMapFrame.grid(row=0, column=0,padx=10,pady=10, columnspan=2)
-fillerLabel.pack()
 
 systemMapFrame.grid(row=0, column=2,padx=10,pady=10, columnspan=2)
 fillerLabel2.pack()
