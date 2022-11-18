@@ -124,6 +124,7 @@ def createSectorMap():
         for c in range(numberOfStars):
             
             icon = starFieldIcon
+            starName = 'NA'
 
             for star in sectorStars:
                 if str(r + 1) == star[2] and str(c + 1) == star[3]:
@@ -134,17 +135,18 @@ def createSectorMap():
                         icon = midStarIcon
                     elif star[1] == 'large':
                         icon = largeStarIcon
+                    
+                    starName = star[0]
                         
-            newSectorButton = Button(sectorMapFrame, image=icon)
+            newSectorButton = Button(sectorMapFrame, image=icon, command=functools.partial(createSystemMap,starName))
             sectorMapButtons.append(newSectorButton)
             sectorMapButtons[buttonCounter].grid(row=r, column=c)
             buttonCounter += 1
 
-
-
-    print(sectorStars)
-    print(numberOfStars)
     sector.close()
+
+def createSystemMap(systemName):
+    print(systemName)
 
 #console object creation
 sectorMapFrame = LabelFrame(rootWindow, text="Sector Map: " + currentSector, labelanchor=N,padx=5, pady=5)
