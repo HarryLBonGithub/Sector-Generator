@@ -10,6 +10,7 @@ selectedRow = "0"
 selectedColumn = "0"
 
 currentSector = ""
+currentSystem = ""
 
 #root window setup
 rootWindow = Tk()
@@ -138,15 +139,15 @@ def createSectorMap():
                     
                     starName = star[0]
                         
-            newSectorButton = Button(sectorMapFrame, image=icon, command=functools.partial(createSystemMap,starName))
+            newSectorButton = Button(sectorMapFrame, image=icon, bg='black', command=functools.partial(createSystemMap,starName,str(r+1),str(c+1)))
             sectorMapButtons.append(newSectorButton)
             sectorMapButtons[buttonCounter].grid(row=r, column=c)
             buttonCounter += 1
 
     sector.close()
 
-def createSystemMap(systemName):
-    print(systemName)
+def createSystemMap(systemName, systemRow, systemColumn):
+    pass
 
 #console object creation
 sectorMapFrame = LabelFrame(rootWindow, text="Sector Map: " + currentSector, labelanchor=N,padx=5, pady=5)
