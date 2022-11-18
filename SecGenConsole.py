@@ -118,9 +118,24 @@ def createSectorMap():
     sectorMapButtons = []
     buttonCounter = 0
 
+    
+
     for r in range(numberOfStars):
         for c in range(numberOfStars):
-            newSectorButton = Button(sectorMapFrame, image=starFieldIcon)
+            
+            icon = starFieldIcon
+
+            for star in sectorStars:
+                if str(r + 1) == star[2] and str(c + 1) == star[3]:
+                    
+                    if star[1]=='small':
+                        icon = smallStarIcon
+                    elif star[1] == 'mid':
+                        icon = midStarIcon
+                    elif star[1] == 'large':
+                        icon = largeStarIcon
+                        
+            newSectorButton = Button(sectorMapFrame, image=icon)
             sectorMapButtons.append(newSectorButton)
             sectorMapButtons[buttonCounter].grid(row=r, column=c)
             buttonCounter += 1
