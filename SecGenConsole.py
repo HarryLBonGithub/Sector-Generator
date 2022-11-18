@@ -147,7 +147,14 @@ def createSectorMap():
     sector.close()
 
 def createSystemMap(systemName, systemRow, systemColumn):
-    pass
+    sector = sqlite3.connect('sectors/' + currentSector)
+    cursor = sector.cursor()
+    cursor.execute('SELECT * FROM planets WHERE star=?;', [systemName])
+    systemPlanets = cursor.fetchall()
+
+    print(systemPlanets)
+
+    sector.close()
 
 #console object creation
 sectorMapFrame = LabelFrame(rootWindow, text="Sector Map: " + currentSector, labelanchor=N,padx=5, pady=5)
