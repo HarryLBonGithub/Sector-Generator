@@ -104,6 +104,10 @@ def openSector():
     pass
 
 def createSectorMap():
+
+    for widget in sectorMapFrame.winfo_children():
+        widget.destroy()
+
     sector = sqlite3.connect('sectors/' + currentSector)
     cursor = sector.cursor()
     cursor.execute('SELECT * FROM stars')
