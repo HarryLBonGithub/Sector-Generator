@@ -22,6 +22,11 @@ smallStarIcon = PhotoImage(file=r'images\Star_Small_64.png')
 midStarIcon = PhotoImage(file=r'images\Star_Mid_64.png')
 largeStarIcon =PhotoImage(file=r'images\Star_Large_64.png')
 
+systemStarIcon = PhotoImage(file=r'images\Planet_Star_64.png')
+smallPlanetIcon = PhotoImage(file=r'images\Planet_Small_64.png')
+midPlanetIcon = PhotoImage(file=r'images\Planet_Mid_64.png')
+largePlanetIcon =PhotoImage(file=r'images\Planet_Large_64.png')
+
 #functions
 def newSectorWindow():
 
@@ -101,13 +106,10 @@ def editStar():
 def editPlanet():
     pass
 
-def openSector():
-    pass
-
 def createSectorMap():
 
-    for widget in sectorMapFrame.winfo_children():
-        widget.destroy()
+    for previousItems in sectorMapFrame.winfo_children():
+        previousItems.destroy()
 
     sector = sqlite3.connect('sectors/' + currentSector)
     cursor = sector.cursor()
@@ -118,8 +120,6 @@ def createSectorMap():
 
     sectorMapButtons = []
     buttonCounter = 0
-
-    
 
     for r in range(numberOfStars):
         for c in range(numberOfStars):
@@ -147,6 +147,15 @@ def createSectorMap():
     sector.close()
 
 def createSystemMap(systemName, systemRow, systemColumn):
+
+    for previousItems in systemMapFrame.winfo_children():
+        previousItems.destroy()
+
+    global selectedRow
+    global selectedColumn
+    selectedRow = systemRow
+    selectedColumn = systemColumn
+
     sector = sqlite3.connect('sectors/' + currentSector)
     cursor = sector.cursor()
     cursor.execute('SELECT * FROM planets WHERE star=?;', [systemName])
@@ -154,13 +163,46 @@ def createSystemMap(systemName, systemRow, systemColumn):
 
     print(systemPlanets)
 
+    planetButtons = []
+
+    newPlanetButton = Button(systemMapFrame, image=systemStarIcon, bg='black')
+
+    planetButtons.append(newPlanetButton)
+
+    planetButtons[0].grid(row=0, column = 0)
+
+    icon = midStarIcon
+
+    counter = 1
+
+    for planet in systemPlanets:
+        if planet[2] == 'small':
+            icon = smallPlanetIcon
+        elif planet[2] == 'mid':
+            icon = midPlanetIcon
+        elif planet[2] == 'large':
+            icon = largePlanetIcon
+        
+        newPlanetButton = Button(systemMapFrame, image = icon, bg = 'black')
+
+        planetButtons.append(newPlanetButton)
+
+        planetButtons[counter].grid(row=0,column=counter)
+
+        counter += 1
+
+
     sector.close()
+
+def planetInfo():
+    pass
 
 #console object creation
 sectorMapFrame = LabelFrame(rootWindow, text="Sector Map: " + currentSector, labelanchor=N,padx=5, pady=5)
+initialSectorLabel = Label(sectorMapFrame, text = "NO SECTOR LOADED")
 
 systemMapFrame = LabelFrame(rootWindow, text="System Map", labelanchor=N)
-fillerLabel2 = Label(systemMapFrame,text="Hello!")
+initialSystemLabel = Label(systemMapFrame,text="NO SYSTEM LOADED")
 
 starInfoFrame = LabelFrame(rootWindow,text="Star Info", labelanchor=N)
 fillerLabel3 = Label(starInfoFrame,text="Hello!")
@@ -177,9 +219,10 @@ newSectorWindowButton = Button(rootWindow, text="NEW SECTOR",command=newSectorWi
 
 #console object display
 sectorMapFrame.grid(row=0, column=0,padx=10,pady=10, columnspan=2)
+initialSectorLabel.grid(row=0, column=0)
 
 systemMapFrame.grid(row=0, column=2,padx=10,pady=10, columnspan=2)
-fillerLabel2.pack()
+initialSystemLabel.grid(row=0,column=0)
 
 starInfoFrame.grid(row=1, column=0,padx=10,pady=10)
 fillerLabel3.pack()
