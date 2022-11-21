@@ -139,16 +139,18 @@ def createSectorMap():
                     
                     starName = star[0]
                         
-            newSectorButton = Button(sectorMapFrame, image=icon, bg='black', command=functools.partial(createSystemMap,starName,str(r+1),str(c+1)))
+            newSectorButton = Button(sectorMapFrame, image=icon, bg='black', command=functools.partial(createSystemMap,starName,star[1],str(r+1),str(c+1)))
             sectorMapButtons.append(newSectorButton)
             sectorMapButtons[buttonCounter].grid(row=r, column=c)
             buttonCounter += 1
 
     sector.close()
 
-def createSystemMap(systemName, systemRow, systemColumn):
+def createSystemMap(systemName, starSize, systemRow, systemColumn):
 
     planetInfoLabel.config(text="NO PLANET LOADED")
+
+    starInfoLabel.config(text="NAME: " + systemName + "\n" + "SIZE: " + starSize + "\n" + "ROW: " + systemRow + "\n" + "COLUMN: " + systemColumn)
 
     for previousItems in systemMapFrame.winfo_children():
         previousItems.destroy()
@@ -203,7 +205,7 @@ sectorMapFrame = LabelFrame(rootWindow, text="Sector Map: " + currentSector, lab
 initialSectorLabel = Label(sectorMapFrame, text = "NO SECTOR LOADED")
 
 starInfoFrame = LabelFrame(rootWindow,text="Star Info", labelanchor=N)
-fillerLabel3 = Label(starInfoFrame,text="Hello!")
+starInfoLabel = Label(starInfoFrame,text="NO STAR LOADED")
 
 editStarButton = Button(rootWindow, text="Edit Star", command=editStar)
 
@@ -223,7 +225,7 @@ sectorMapFrame.grid(row=0, column=0,padx=10,pady=10, rowspan=2)
 initialSectorLabel.grid(row=0, column=0)
 
 starInfoFrame.grid(row=0, column=1,padx=10,pady=10)
-fillerLabel3.pack()
+starInfoLabel.pack()
 
 editStarButton.grid(row=1,column=1,padx=10,pady=10)
 
