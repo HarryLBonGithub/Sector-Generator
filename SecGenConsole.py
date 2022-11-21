@@ -148,6 +148,8 @@ def createSectorMap():
 
 def createSystemMap(systemName, systemRow, systemColumn):
 
+    planetInfoLabel.config(text="NO PLANET LOADED")
+
     for previousItems in systemMapFrame.winfo_children():
         previousItems.destroy()
 
@@ -160,8 +162,6 @@ def createSystemMap(systemName, systemRow, systemColumn):
     cursor = sector.cursor()
     cursor.execute('SELECT * FROM planets WHERE star=?;', [systemName])
     systemPlanets = cursor.fetchall()
-
-    print(systemPlanets)
 
     planetButtons = []
 
@@ -183,7 +183,7 @@ def createSystemMap(systemName, systemRow, systemColumn):
         elif planet[2] == 'large':
             icon = largePlanetIcon
         
-        newPlanetButton = Button(systemMapFrame, image = icon, bg = 'black')
+        newPlanetButton = Button(systemMapFrame, image = icon, bg = 'black', command = functools.partial(planetInfo, planet[1],planet[3],planet[4],planet[5], planet[6]))
 
         planetButtons.append(newPlanetButton)
 
@@ -194,23 +194,24 @@ def createSystemMap(systemName, systemRow, systemColumn):
 
     sector.close()
 
-def planetInfo():
-    pass
+def planetInfo(name, temperature, humidity, life, note):
+    formattedInfo ="NAME: " + name + "\n" + "TEMPERATURE: " + temperature + "\n" + "HUMIDITY: " + humidity +"\n" + "LIFE SIGNS: " + life + "\n" + "NOTE: " + note
+    planetInfoLabel.config(text=formattedInfo)
 
 #console object creation
 sectorMapFrame = LabelFrame(rootWindow, text="Sector Map: " + currentSector, labelanchor=N,padx=5, pady=5)
 initialSectorLabel = Label(sectorMapFrame, text = "NO SECTOR LOADED")
-
-systemMapFrame = LabelFrame(rootWindow, text="System Map", labelanchor=N)
-initialSystemLabel = Label(systemMapFrame,text="NO SYSTEM LOADED")
 
 starInfoFrame = LabelFrame(rootWindow,text="Star Info", labelanchor=N)
 fillerLabel3 = Label(starInfoFrame,text="Hello!")
 
 editStarButton = Button(rootWindow, text="Edit Star", command=editStar)
 
+systemMapFrame = LabelFrame(rootWindow, text="System Map", labelanchor=N)
+initialSystemLabel = Label(systemMapFrame,text="NO SYSTEM LOADED")
+
 planetInfoFrame = LabelFrame(rootWindow,text="Planet Info", labelanchor=N)
-fillerLabel4 = Label(planetInfoFrame,text="Hello!")
+planetInfoLabel = Label(planetInfoFrame,text="NO PLANET LOADED")
 
 editPlanetButton = Button(rootWindow, text="Edit Planet", command=editPlanet)
 
@@ -218,23 +219,23 @@ openSectorWindowButton = Button(rootWindow, text="OPEN SECTOR", command=openSect
 newSectorWindowButton = Button(rootWindow, text="NEW SECTOR",command=newSectorWindow)
 
 #console object display
-sectorMapFrame.grid(row=0, column=0,padx=10,pady=10, columnspan=2)
+sectorMapFrame.grid(row=0, column=0,padx=10,pady=10, rowspan=2)
 initialSectorLabel.grid(row=0, column=0)
 
-systemMapFrame.grid(row=0, column=2,padx=10,pady=10, columnspan=2)
-initialSystemLabel.grid(row=0,column=0)
-
-starInfoFrame.grid(row=1, column=0,padx=10,pady=10)
+starInfoFrame.grid(row=0, column=1,padx=10,pady=10)
 fillerLabel3.pack()
 
 editStarButton.grid(row=1,column=1,padx=10,pady=10)
 
-planetInfoFrame.grid(row=1, column=2,padx=10,pady=10)
-fillerLabel4.pack()
+systemMapFrame.grid(row=2, column=0,padx=10,pady=10)
+initialSystemLabel.grid(row=0,column=0)
 
-editPlanetButton.grid(row=1,column=3,padx=10,pady=10)
+planetInfoFrame.grid(row=3, column=0,padx=10,pady=10)
+planetInfoLabel.pack()
 
-openSectorWindowButton.grid(row=2,column=0, pady = 10, columnspan=2)
-newSectorWindowButton.grid(row=2, column=2,pady=10, columnspan=2)
+editPlanetButton.grid(row=3,column=1,padx=10,pady=10)
+
+openSectorWindowButton.grid(row=4,column=0, pady = 10, columnspan=2)
+newSectorWindowButton.grid(row=4, column=1,pady=10, columnspan=2)
 
 rootWindow.mainloop()
