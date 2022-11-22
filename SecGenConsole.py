@@ -50,11 +50,15 @@ def newSectorWindow():
         sectorMapFrame.config(text="Sector Map: " + currentSector[:-3])
         newSectorCreator.destroy()
         createSectorMap()
+
+        newSectorCreator.grab_release()
         
     newSectorCreator = Toplevel()
     newNamePrompt = Label(newSectorCreator, text="Sector Name: ")
     newSecNameInput = Entry(newSectorCreator,width=20)
     newSecConfirmButton = Button(newSectorCreator,text="Confirm", command=createSector)
+
+    newSectorCreator.grab_set()
 
     sizeSelectionPrompt = Label(newSectorCreator, text="Size: ")
     sizeSelection = StringVar()
@@ -83,17 +87,20 @@ def openSectorWindow():
         
         planetInfoLabel.config(text="NO PLANET LOADED")
         starInfoLabel.config(text="NO SYSTEM LOADED")
-        
 
-
+        loadSectorWindow.grab_release()
 
     def deleteSector():
         os.remove('sectors/' + str(sectorSelection.get()))
         sectorMapFrame.config(text="Sector Map: ")
         loadSectorWindow.destroy()
+
+        loadSectorWindow.grab_release()
         #needs a way to update the options menu without the deleted sector
 
     loadSectorWindow = Toplevel()
+
+    loadSectorWindow.grab_set()
 
     sectorsList = os.listdir('sectors')
 
