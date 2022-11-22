@@ -47,7 +47,7 @@ def newSectorWindow():
             SecGenFunctions.generateSector(newSecNameInput.get(), starNumber, gridNumber)
         
         currentSector = str(newSecNameInput.get() + ".db")
-        sectorMapFrame.config(text="Sector Map: " + currentSector)
+        sectorMapFrame.config(text="Sector Map: " + currentSector[:-3])
         newSectorCreator.destroy()
         createSectorMap()
         
@@ -73,7 +73,7 @@ def openSectorWindow():
         global currentSector
 
         currentSector = sectorSelection.get()
-        sectorMapFrame.config(text="Sector Map: " + currentSector)
+        sectorMapFrame.config(text="Sector Map: " + currentSector[:-3])
         loadSectorWindow.destroy()
 
         createSectorMap()
