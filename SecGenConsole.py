@@ -104,16 +104,22 @@ def openSectorWindow():
 
     sectorsList = os.listdir('sectors')
 
-    sectorSelection = StringVar()
-    sectorSelection.set(sectorsList[0])
-    sectorOptions = OptionMenu(loadSectorWindow, sectorSelection, *sectorsList)
+    if len(sectorsList) > 0:
 
-    loadSectorButton = Button(loadSectorWindow,text="Load",command=loadSector)
-    deleteSectorButton = Button(loadSectorWindow,text="Delete",command=deleteSector)
+        sectorSelection = StringVar()
+        sectorSelection.set(sectorsList[0])
+        sectorOptions = OptionMenu(loadSectorWindow, sectorSelection, *sectorsList)
 
-    sectorOptions.grid(row=0, column=0)
-    loadSectorButton.grid(row=0, column=1)
-    deleteSectorButton.grid(row=0,column=2)
+        loadSectorButton = Button(loadSectorWindow,text="Load",command=loadSector)
+        deleteSectorButton = Button(loadSectorWindow,text="Delete",command=deleteSector)
+
+        sectorOptions.grid(row=0, column=0)
+        loadSectorButton.grid(row=0, column=1)
+        deleteSectorButton.grid(row=0,column=2)
+    
+    else:
+        loadSectorWindow.destroy()
+        messagebox.showerror(title="NO SECTORS", message="No Sector Databases to Load")
 
 def editStar():
     pass
