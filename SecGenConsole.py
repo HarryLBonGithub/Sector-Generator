@@ -234,9 +234,6 @@ planetInfoLabel = Label(planetInfoFrame,text="NO PLANET LOADED")
 
 editPlanetButton = Button(rootWindow, text="Edit Planet", command=editPlanet)
 
-openSectorWindowButton = Button(rootWindow, text="OPEN SECTOR", command=openSectorWindow)
-newSectorWindowButton = Button(rootWindow, text="NEW SECTOR",command=newSectorWindow)
-
 #console object display
 sectorMapFrame.grid(row=0, column=0,padx=10,pady=10, rowspan=2)
 initialSectorLabel.grid(row=0, column=0)
@@ -254,7 +251,17 @@ planetInfoLabel.pack()
 
 editPlanetButton.grid(row=3,column=1,padx=10,pady=10)
 
-openSectorWindowButton.grid(row=4,column=0, pady = 10, columnspan=2)
-newSectorWindowButton.grid(row=4, column=1,pady=10, columnspan=2)
+#console menu bar
+menuBar = Menu(rootWindow)
+rootWindow.config(menu=menuBar)
+
+fileMenu = Menu(menuBar, tearoff=False)
+
+fileMenu.add_command(label='New', command=newSectorWindow)
+fileMenu.add_command(label='Open', command=openSectorWindow)
+fileMenu.add_command(label='Exit',command=rootWindow.destroy)
+
+
+menuBar.add_cascade(label="File",menu=fileMenu)
 
 rootWindow.mainloop()
