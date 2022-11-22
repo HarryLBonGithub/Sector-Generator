@@ -78,6 +78,14 @@ def openSectorWindow():
 
         createSectorMap()
 
+        for previousItems in systemMapFrame.winfo_children():
+            previousItems.destroy()
+        
+        planetInfoLabel.config(text="NO PLANET LOADED")
+        starInfoLabel.config(text="NO SYSTEM LOADED")
+        
+
+
 
     def deleteSector():
         os.remove('sectors/' + str(sectorSelection.get()))
