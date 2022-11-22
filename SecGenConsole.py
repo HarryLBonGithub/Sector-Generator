@@ -134,6 +134,7 @@ def createSectorMap():
             
             icon = starFieldIcon
             starName = 'NA'
+            starSize = 'NA'
 
             for star in sectorStars:
                 if str(r + 1) == star[2] and str(c + 1) == star[3]:
@@ -146,8 +147,9 @@ def createSectorMap():
                         icon = largeStarIcon
                     
                     starName = star[0]
+                    starSize = star[1]
                         
-            newSectorButton = Button(sectorMapFrame, image=icon, bg='black', command=functools.partial(createSystemMap,starName,star[1],str(r+1),str(c+1)))
+            newSectorButton = Button(sectorMapFrame, image=icon, bg='black', command=functools.partial(createSystemMap,starName,starSize,str(r+1),str(c+1)))
             sectorMapButtons.append(newSectorButton)
             sectorMapButtons[buttonCounter].grid(row=r, column=c)
             buttonCounter += 1
