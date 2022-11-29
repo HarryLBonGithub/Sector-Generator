@@ -33,6 +33,12 @@ def newSectorWindow():
     def createSector():
         global currentSector
 
+        sectorsList = os.listdir('sectors')
+
+        if str(newSecNameInput.get() + ".db") in sectorsList:
+            messagebox.showerror(title="BAD NAME", message="Sector already exists. Choose a different name.")
+            return
+
         if sizeSelection.get() == "Small":
             gridNumber = 5
             starNumber = 5
