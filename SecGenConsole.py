@@ -59,6 +59,7 @@ def newSectorWindow():
         createSectorMap()
 
         newSectorCreator.grab_release()
+        resetCurrents()
         statusUpdate()
         
     newSectorCreator = Toplevel()
@@ -98,6 +99,7 @@ def openSectorWindow():
 
         loadSectorWindow.grab_release()
 
+        resetCurrents()
         statusUpdate()
 
     def deleteSector():
@@ -123,6 +125,8 @@ def openSectorWindow():
                 initialSectorLabel = Label(sectorMapFrame, text = "NO SECTOR LOADED")
                 initialSystemLabel.grid(row=0,column=0)
                 initialSectorLabel.grid(row=0, column=0)
+
+                resetCurrents()
 
             os.remove('sectors/' + str(sectorSelection.get()))
             sectorMapFrame.config(text="Sector Map: ")
@@ -155,10 +159,10 @@ def openSectorWindow():
         loadSectorWindow.destroy()
         messagebox.showerror(title="NO SECTORS", message="No Sector Databases to Load")
 
-def editStar():
+def editStarWindow():
     pass
 
-def editPlanet():
+def editPlanetWindow():
     pass
 
 def createSectorMap():
@@ -271,20 +275,32 @@ def planetInfo(name, temperature, humidity, life, note):
 def statusUpdate():
     status.config(text="Sec: " + currentSector + "/Sys: " + currentSystem + "/Pln: " + currentPlanet + "[R:" + selectedRow + "/C:" + selectedColumn + "]", relief=SUNKEN, anchor=E)
 
+def resetCurrents():
+    global currentPlanet
+    global currentSystem
+    global selectedColumn
+    global selectedRow
+
+    currentPlanet = ""
+    currentSystem = ""
+    selectedColumn = "0"
+    selectedRow = "0"
+    
+
 #console object creation
 sectorMapFrame = LabelFrame(rootWindow, text="Sector Map: " + currentSector, labelanchor=N,padx=5, pady=5)
 initialSectorLabel = Label(sectorMapFrame, text = "NO SECTOR LOADED")
 
 starInfoFrame = LabelFrame(rootWindow,text="Star Info", labelanchor=N)
 starInfoLabel = Label(starInfoFrame,text="NO STAR LOADED", justify=LEFT)
-editStarButton = Button(starInfoFrame, text="Edit Star", command=editStar, height=4)
+editStarButton = Button(starInfoFrame, text="Edit Star", command=editStarWindow, height=4)
 
 systemMapFrame = LabelFrame(rootWindow, text="System Map", labelanchor=N)
 initialSystemLabel = Label(systemMapFrame,text="NO SYSTEM LOADED")
 
 planetInfoFrame = LabelFrame(rootWindow,text="Planet Info", labelanchor=N)
 planetInfoLabel = Label(planetInfoFrame,text="NO PLANET LOADED", justify=LEFT)
-editPlanetButton = Button(planetInfoFrame, text="Edit Planet", command=editPlanet, height=5)
+editPlanetButton = Button(planetInfoFrame, text="Edit Planet", command=editPlanetWindow, height=5)
 
 status = Label(rootWindow, text="Sec: " + currentSector + "/Sys: " + currentSystem + "/Pln: " + currentPlanet + "[R:" + selectedRow + "/C:" + selectedColumn + "]", relief=SUNKEN, anchor=E)
 
