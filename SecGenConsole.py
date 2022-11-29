@@ -18,6 +18,9 @@ rootWindow = Tk()
 rootWindow.title("SecGen")
 
 #preload images
+welcomeImage = PhotoImage(file=r'images\Sec-Gen Filler.png')
+systemMapFiller = PhotoImage(file=r'images\Sec-Gen Long Filler.png')
+
 starFieldIcon = PhotoImage(file=r'images\Stars64.png')
 smallStarIcon = PhotoImage(file=r'images\Star_Small_64.png')
 midStarIcon = PhotoImage(file=r'images\Star_Mid_64.png')
@@ -53,6 +56,8 @@ def newSectorWindow():
             starNumber = 15
             SecGenFunctions.generateSector(newSecNameInput.get(), starNumber, gridNumber)
         
+        clearMaps()
+
         currentSector = str(newSecNameInput.get() + ".db")
         sectorMapFrame.config(text="Sector Map: " + currentSector[:-3])
         newSectorCreator.destroy()
@@ -89,13 +94,9 @@ def openSectorWindow():
         sectorMapFrame.config(text="Sector Map: " + currentSector[:-3])
         loadSectorWindow.destroy()
 
-        createSectorMap()
+        clearMaps()
 
-        for previousItems in systemMapFrame.winfo_children():
-            previousItems.destroy()
-        
-        planetInfoLabel.config(text="NO PLANET LOADED")
-        starInfoLabel.config(text="NO SYSTEM LOADED")
+        createSectorMap()
 
         loadSectorWindow.grab_release()
 
@@ -112,19 +113,7 @@ def openSectorWindow():
 
             if str(sectorSelection.get()) == currentSector:
 
-                for previousItems in sectorMapFrame.winfo_children():
-                    previousItems.destroy()
-                
-                for previousItems in systemMapFrame.winfo_children():
-                    previousItems.destroy()
-
-                planetInfoLabel.config(text="NO PLANET LOADED")
-                starInfoLabel.config(text="NO STAR LOADED")
-
-                initialSystemLabel = Label(systemMapFrame,text="NO SYSTEM LOADED")
-                initialSectorLabel = Label(sectorMapFrame, text = "NO SECTOR LOADED")
-                initialSystemLabel.grid(row=0,column=0)
-                initialSectorLabel.grid(row=0, column=0)
+                clearMaps()
 
                 resetCurrents()
 
@@ -285,18 +274,31 @@ def resetCurrents():
     currentSystem = ""
     selectedColumn = "0"
     selectedRow = "0"
-    
+
+def clearMaps():
+    for previousItems in sectorMapFrame.winfo_children():
+        previousItems.destroy()
+                
+    for previousItems in systemMapFrame.winfo_children():
+        previousItems.destroy()
+
+    planetInfoLabel.config(text="NO PLANET LOADED")
+    starInfoLabel.config(text="NO SYSTEM LOADED")
+    welcomeLabel = Label(sectorMapFrame, image=welcomeImage)
+    welcomeLabel.grid(row=0, column=0)
+    systemMapFillerImage = Label(systemMapFrame, image=systemMapFiller)
+    systemMapFillerImage.grid(row=0,column=0)
 
 #console object creation
 sectorMapFrame = LabelFrame(rootWindow, text="Sector Map: " + currentSector, labelanchor=N,padx=5, pady=5)
-initialSectorLabel = Label(sectorMapFrame, text = "NO SECTOR LOADED")
+welcomeLabel = Label(sectorMapFrame, image=welcomeImage)
 
 starInfoFrame = LabelFrame(rootWindow,text="Star Info", labelanchor=N)
 starInfoLabel = Label(starInfoFrame,text="NO STAR LOADED", justify=LEFT)
 editStarButton = Button(starInfoFrame, text="Edit Star", command=editStarWindow, height=4)
 
 systemMapFrame = LabelFrame(rootWindow, text="System Map", labelanchor=N)
-initialSystemLabel = Label(systemMapFrame,text="NO SYSTEM LOADED")
+systemMapFillerImage = Label(systemMapFrame, image=systemMapFiller)
 
 planetInfoFrame = LabelFrame(rootWindow,text="Planet Info", labelanchor=N)
 planetInfoLabel = Label(planetInfoFrame,text="NO PLANET LOADED", justify=LEFT)
@@ -306,7 +308,7 @@ status = Label(rootWindow, text="Sec: " + currentSector + "/Sys: " + currentSyst
 
 #console object display
 sectorMapFrame.grid(row=0, column=0,padx=10,pady=10, rowspan=2, sticky=NW)
-initialSectorLabel.grid(row=0, column=0)
+welcomeLabel.grid(row=0, column=0)
 
 starInfoFrame.grid(row=0, column=1,padx=10,pady=10,sticky=SW)
 starInfoLabel.grid(row=0, column=0)
@@ -317,7 +319,7 @@ planetInfoLabel.grid(row = 0, column=0)
 editPlanetButton.grid(row=0,column=1,padx=10,pady=10)
 
 systemMapFrame.grid(row=2, column=0,padx=10,pady=10, sticky=W, columnspan=2)
-initialSystemLabel.grid(row=0,column=0)
+systemMapFillerImage.grid(row=0,column=0)
 
 status.grid(row=3, column=0, columnspan=2, sticky=W+E)
 
