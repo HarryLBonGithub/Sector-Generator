@@ -71,11 +71,11 @@ def newSectorWindow():
     sizeSelection.set("Medium")
     newSecSize = OptionMenu(newSectorCreator, sizeSelection, "Small", "Medium", "Large")
 
-    newNamePrompt.grid(row=0, column=0, padx=10, pady=10)
-    newSecNameInput.grid(row=0, column=1, padx=10,pady=10)
+    newNamePrompt.grid(row=0, column=0, padx=(5,0), pady=10)
+    newSecNameInput.grid(row=0, column=1, padx=(0,5),pady=10)
     sizeSelectionPrompt.grid(row=0,column=2)
-    newSecSize.grid(row=0, column=3, padx=10)
-    newSecConfirmButton.grid(row=1)
+    newSecSize.grid(row=0, column=3, padx=(0,5))
+    newSecConfirmButton.grid(row=1, columnspan=4, pady=5)
 
 def openSectorWindow():
 
@@ -94,15 +94,42 @@ def openSectorWindow():
         planetInfoLabel.config(text="NO PLANET LOADED")
         starInfoLabel.config(text="NO SYSTEM LOADED")
 
+        
+
         loadSectorWindow.grab_release()
 
     def deleteSector():
-        os.remove('sectors/' + str(sectorSelection.get()))
-        sectorMapFrame.config(text="Sector Map: ")
-        loadSectorWindow.destroy()
 
-        loadSectorWindow.grab_release()
-        #needs a way to update the options menu without the deleted sector
+        global currentSector
+
+        confirmed = messagebox.askyesno(title="DELETE SECTOR", message="Are you sure you want to delete this sector? This action cannot be undone.")
+
+        if confirmed:
+
+            if str(sectorSelection.get()) == currentSector:
+
+                for previousItems in sectorMapFrame.winfo_children():
+                    previousItems.destroy()
+                
+                for previousItems in systemMapFrame.winfo_children():
+                    previousItems.destroy()
+
+                planetInfoLabel.config(text="NO PLANET LOADED")
+                starInfoLabel.config(text="NO STAR LOADED")
+
+                initialSystemLabel = Label(systemMapFrame,text="NO SYSTEM LOADED")
+                initialSectorLabel = Label(sectorMapFrame, text = "NO SECTOR LOADED")
+                initialSystemLabel.grid(row=0,column=0)
+                initialSectorLabel.grid(row=0, column=0)
+
+
+
+            os.remove('sectors/' + str(sectorSelection.get()))
+            sectorMapFrame.config(text="Sector Map: ")
+            loadSectorWindow.destroy()
+
+            loadSectorWindow.grab_release()
+            #needs a way to update the options menu without the deleted sector
 
     loadSectorWindow = Toplevel()
 
@@ -119,9 +146,9 @@ def openSectorWindow():
         loadSectorButton = Button(loadSectorWindow,text="Load",command=loadSector)
         deleteSectorButton = Button(loadSectorWindow,text="Delete",command=deleteSector)
 
-        sectorOptions.grid(row=0, column=0)
+        sectorOptions.grid(row=0, column=0, padx=5, pady=5)
         loadSectorButton.grid(row=0, column=1)
-        deleteSectorButton.grid(row=0,column=2)
+        deleteSectorButton.grid(row=0,column=2, padx=(0,5))
     
     else:
         loadSectorWindow.destroy()
