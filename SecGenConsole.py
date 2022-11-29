@@ -262,33 +262,31 @@ initialSectorLabel = Label(sectorMapFrame, text = "NO SECTOR LOADED")
 
 starInfoFrame = LabelFrame(rootWindow,text="Star Info", labelanchor=N)
 starInfoLabel = Label(starInfoFrame,text="NO STAR LOADED")
-
-editStarButton = Button(rootWindow, text="Edit Star", command=editStar)
+editStarButton = Button(starInfoFrame, text="Edit Star", command=editStar)
 
 systemMapFrame = LabelFrame(rootWindow, text="System Map", labelanchor=N)
 initialSystemLabel = Label(systemMapFrame,text="NO SYSTEM LOADED")
 
 planetInfoFrame = LabelFrame(rootWindow,text="Planet Info", labelanchor=N)
 planetInfoLabel = Label(planetInfoFrame,text="NO PLANET LOADED")
-
-editPlanetButton = Button(rootWindow, text="Edit Planet", command=editPlanet)
+editPlanetButton = Button(planetInfoFrame, text="Edit Planet", command=editPlanet)
 
 #console object display
-sectorMapFrame.grid(row=0, column=0,padx=10,pady=10, rowspan=2)
+sectorMapFrame.grid(row=0, column=0,padx=10,pady=10, rowspan=2, sticky=NW)
 initialSectorLabel.grid(row=0, column=0)
 
-starInfoFrame.grid(row=0, column=1,padx=10,pady=10)
-starInfoLabel.pack()
+starInfoFrame.grid(row=0, column=1,padx=10,pady=10,sticky=SW)
+starInfoLabel.grid(row=0, column=0)
+editStarButton.grid(row=0,column=1,padx=10,pady=10)
 
-editStarButton.grid(row=1,column=1,padx=10,pady=10)
+planetInfoFrame.grid(row=1, column=1,padx=10,pady=10, sticky=NW)
+planetInfoLabel.grid(row = 0, column=0)
+editPlanetButton.grid(row=0,column=1,padx=10,pady=10)
 
-systemMapFrame.grid(row=2, column=0,padx=10,pady=10)
+systemMapFrame.grid(row=2, column=0,padx=10,pady=10, sticky=W, columnspan=2)
 initialSystemLabel.grid(row=0,column=0)
 
-planetInfoFrame.grid(row=3, column=0,padx=10,pady=10)
-planetInfoLabel.pack()
 
-editPlanetButton.grid(row=3,column=1,padx=10,pady=10)
 
 #console menu bar
 menuBar = Menu(rootWindow)
