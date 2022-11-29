@@ -6,11 +6,12 @@ import functools #for .partial(command, arg)
 import sqlite3
 
 #variables
+currentSector = ""
+
 selectedRow = "0"
 selectedColumn = "0"
-
-currentSector = ""
 currentSystem = ""
+currentPlanet = ""
 
 #root window setup
 rootWindow = Tk()
@@ -58,6 +59,7 @@ def newSectorWindow():
         createSectorMap()
 
         newSectorCreator.grab_release()
+        statusUpdate()
         
     newSectorCreator = Toplevel()
     newNamePrompt = Label(newSectorCreator, text="Sector Name: ")
@@ -94,9 +96,9 @@ def openSectorWindow():
         planetInfoLabel.config(text="NO PLANET LOADED")
         starInfoLabel.config(text="NO SYSTEM LOADED")
 
-        
-
         loadSectorWindow.grab_release()
+
+        statusUpdate()
 
     def deleteSector():
 
@@ -122,14 +124,13 @@ def openSectorWindow():
                 initialSystemLabel.grid(row=0,column=0)
                 initialSectorLabel.grid(row=0, column=0)
 
-
-
             os.remove('sectors/' + str(sectorSelection.get()))
             sectorMapFrame.config(text="Sector Map: ")
             loadSectorWindow.destroy()
 
             loadSectorWindow.grab_release()
-            #needs a way to update the options menu without the deleted sector
+
+            statusUpdate()
 
     loadSectorWindow = Toplevel()
 
@@ -200,9 +201,14 @@ def createSectorMap():
             sectorMapButtons[buttonCounter].grid(row=r, column=c)
             buttonCounter += 1
 
+    statusUpdate()
+
     sector.close()
 
 def createSystemMap(systemName, starSize, systemRow, systemColumn):
+
+    global currentSystem
+    currentSystem = systemName
 
     planetInfoLabel.config(text="NO PLANET LOADED")
 
@@ -249,27 +255,38 @@ def createSystemMap(systemName, starSize, systemRow, systemColumn):
 
         counter += 1
 
+    statusUpdate()
 
     sector.close()
 
 def planetInfo(name, temperature, humidity, life, note):
+    global currentPlanet
+    currentPlanet = name
+
     formattedInfo ="NAME: " + name + "\n" + "TEMPERATURE: " + temperature + "\n" + "HUMIDITY: " + humidity +"\n" + "LIFE SIGNS: " + life + "\n" + "NOTE: " + note
     planetInfoLabel.config(text=formattedInfo)
+
+    statusUpdate()
+
+def statusUpdate():
+    status.config(text="Sec: " + currentSector + "/Sys: " + currentSystem + "/Pln: " + currentPlanet + "[R:" + selectedRow + "/C:" + selectedColumn + "]", relief=SUNKEN, anchor=E)
 
 #console object creation
 sectorMapFrame = LabelFrame(rootWindow, text="Sector Map: " + currentSector, labelanchor=N,padx=5, pady=5)
 initialSectorLabel = Label(sectorMapFrame, text = "NO SECTOR LOADED")
 
 starInfoFrame = LabelFrame(rootWindow,text="Star Info", labelanchor=N)
-starInfoLabel = Label(starInfoFrame,text="NO STAR LOADED")
-editStarButton = Button(starInfoFrame, text="Edit Star", command=editStar)
+starInfoLabel = Label(starInfoFrame,text="NO STAR LOADED", justify=LEFT)
+editStarButton = Button(starInfoFrame, text="Edit Star", command=editStar, height=4)
 
 systemMapFrame = LabelFrame(rootWindow, text="System Map", labelanchor=N)
 initialSystemLabel = Label(systemMapFrame,text="NO SYSTEM LOADED")
 
 planetInfoFrame = LabelFrame(rootWindow,text="Planet Info", labelanchor=N)
-planetInfoLabel = Label(planetInfoFrame,text="NO PLANET LOADED")
-editPlanetButton = Button(planetInfoFrame, text="Edit Planet", command=editPlanet)
+planetInfoLabel = Label(planetInfoFrame,text="NO PLANET LOADED", justify=LEFT)
+editPlanetButton = Button(planetInfoFrame, text="Edit Planet", command=editPlanet, height=5)
+
+status = Label(rootWindow, text="Sec: " + currentSector + "/Sys: " + currentSystem + "/Pln: " + currentPlanet + "[R:" + selectedRow + "/C:" + selectedColumn + "]", relief=SUNKEN, anchor=E)
 
 #console object display
 sectorMapFrame.grid(row=0, column=0,padx=10,pady=10, rowspan=2, sticky=NW)
@@ -286,7 +303,7 @@ editPlanetButton.grid(row=0,column=1,padx=10,pady=10)
 systemMapFrame.grid(row=2, column=0,padx=10,pady=10, sticky=W, columnspan=2)
 initialSystemLabel.grid(row=0,column=0)
 
-
+status.grid(row=3, column=0, columnspan=2, sticky=W+E)
 
 #console menu bar
 menuBar = Menu(rootWindow)
@@ -297,7 +314,6 @@ fileMenu = Menu(menuBar, tearoff=False)
 fileMenu.add_command(label='New', command=newSectorWindow)
 fileMenu.add_command(label='Open', command=openSectorWindow)
 fileMenu.add_command(label='Exit',command=rootWindow.destroy)
-
 
 menuBar.add_cascade(label="File",menu=fileMenu)
 
