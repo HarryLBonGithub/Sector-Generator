@@ -153,8 +153,9 @@ def openSectorWindow():
 
 def openEditStarWindow():
 
+    #NEEDS ENTRY ERROR CHECKING
+
     def createStarCommand():
-        #NEEDS ENTRY ERROR CHECKING
 
         SecGenFunctions.generateStarSystem(currentSector,nameEntryField.get(),sizeSelection.get(),planetCountEntryField.get(),selectedRow,selectedColumn)
 
@@ -163,12 +164,22 @@ def openEditStarWindow():
         createStarWindow.grab_release()
         createStarWindow.destroy()
 
-    if currentSystem == "NA":
+    def editStarNameCommand():
+        pass
+
+    def editStarSizeCommand():
+        pass
+
+    def deleteStarSystemCommand():
+        pass
+
+    if currentSystem == "NA": #If clicking on empty space, open the 'create system' window
         createStarWindow = Toplevel()
         createStarWindow.title("Create Star")
 
         createStarWindow.grab_set()
 
+        #object creation
         instructionLabel = Label(createStarWindow,text="Create star at sector coordinates [R:"+selectedRow+"/C:"+selectedColumn+"]")
 
         nameEntryLabel = Label(createStarWindow, text="Name: ")
@@ -180,6 +191,7 @@ def openEditStarWindow():
         planetCountEntryField = Entry(createStarWindow, width=20)
         createButton = Button(createStarWindow, text="Create", command=createStarCommand)
 
+        #object display
         instructionLabel.grid(row=0,column=0)
 
         nameEntryLabel.grid(row=1,column=0)
@@ -194,8 +206,34 @@ def openEditStarWindow():
         return
 
     else:
+        
         editStarWindow = Toplevel()
         editStarWindow.title("Edit Star")
+        
+        #object creation
+        instructionLabel = Label(editStarWindow,text="Edit star at sector coordinates [R:"+selectedRow+"/C:"+selectedColumn+"]")
+        nameEntryLabel = Label(editStarWindow, text="Name: ")
+        nameEntryField = Entry(editStarWindow, width=20)
+        nameCommitButton = Button(editStarWindow, text="Commit", command=editStarNameCommand)
+
+        sizeSelection = StringVar()
+        sizeSelection.set("mid")
+        newStarSize = OptionMenu(editStarWindow, sizeSelection, "small", "mid", "large")
+        sizeCommitButton = Button(editStarWindow, text="Commit")
+
+        deleteSystemButton = Button(editStarWindow, text="DELETE SYSTEM")
+
+        #object display
+        instructionLabel.grid(row=0, column=0, columnspan=3)
+
+        nameEntryLabel.grid(row=1,column=0)
+        nameEntryField.grid(row=1,column=1)
+        nameCommitButton.grid(row=1,column=2)
+
+        newStarSize.grid(row=2,column=0)
+        sizeCommitButton.grid(row=2,column=1)
+
+        deleteSystemButton.grid(row=3,column=0,columnspan=3)
 
 def editPlanetWindow():
     pass
