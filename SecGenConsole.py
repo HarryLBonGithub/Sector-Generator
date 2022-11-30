@@ -153,26 +153,57 @@ def openSectorWindow():
 
 def openEditStarWindow():
 
-    #NEEDS ENTRY ERROR CHECKING
+    #needs error checking for number of planets created
 
     def createStarCommand():
+        nameEntry = nameEntryField.get().strip()
+        
+        if SecGenFunctions.nameIsValid(currentSector,nameEntry) and numberIsValid():
 
-        SecGenFunctions.generateStarSystem(currentSector,nameEntryField.get(),sizeSelection.get(),planetCountEntryField.get(),selectedRow,selectedColumn)
+            SecGenFunctions.generateStarSystem(currentSector,nameEntry,sizeSelection.get(),planetCountEntryField.get(),selectedRow,selectedColumn)
 
-        clearMaps()
-        createSectorMap()
-        createStarWindow.grab_release()
-        createStarWindow.destroy()
+            editCleanup()
+            createStarWindow.grab_release()
+            createStarWindow.destroy()
+        else:
+            messagebox.showerror(title="INVALID NAME", message="Name must be unique and have at least 1 character. Number of planets must be an integer ranging from 0 - 10.")
 
     def editStarNameCommand():
-        pass
+        nameEntry = nameEntryField.get().strip()
+
+        if SecGenFunctions.nameIsValid(currentSector,nameEntry):
+
+            SecGenFunctions.editStarName(currentSector,currentSystem,nameEntry)
+
+            editCleanup()
+            editStarWindow.grab_release()
+            editStarWindow.destroy()
+        else:
+            messagebox.showerror(title="INVALID NAME", message="Name must be unique and have at least 1 character.")
 
     def editStarSizeCommand():
-        pass
+
+        SecGenFunctions.editStarSize(currentSector,currentSystem,sizeSelection.get())
+
+        editCleanup()
+        editStarWindow.grab_release()
+        editStarWindow.destroy()
 
     def deleteStarSystemCommand():
         pass
-
+    
+    def editCleanup():
+        clearMaps()
+        createSectorMap()
+        resetCurrents()
+        statusUpdate()
+    
+    def numberIsValid():
+        if planetCountEntryField.get().isnumeric() and int(planetCountEntryField.get()) >= 0 and int(planetCountEntryField.get()) < 11:
+            return True
+        else:
+            return False  
+    
     if currentSystem == "NA": #If clicking on empty space, open the 'create system' window
         createStarWindow = Toplevel()
         createStarWindow.title("Create Star")
@@ -209,6 +240,8 @@ def openEditStarWindow():
         
         editStarWindow = Toplevel()
         editStarWindow.title("Edit Star")
+
+        editStarWindow.grab_set()
         
         #object creation
         instructionLabel = Label(editStarWindow,text="Edit star at sector coordinates [R:"+selectedRow+"/C:"+selectedColumn+"]")
@@ -219,7 +252,7 @@ def openEditStarWindow():
         sizeSelection = StringVar()
         sizeSelection.set("mid")
         newStarSize = OptionMenu(editStarWindow, sizeSelection, "small", "mid", "large")
-        sizeCommitButton = Button(editStarWindow, text="Commit")
+        sizeCommitButton = Button(editStarWindow, text="Commit", command=editStarSizeCommand)
 
         deleteSystemButton = Button(editStarWindow, text="DELETE SYSTEM")
 

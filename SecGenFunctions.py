@@ -115,4 +115,44 @@ def generateStarSystem(sectorName, starName, size, numberOfPlanets, row, column)
             cursor.execute("INSERT INTO planets VALUES (?,?,?,?,?,?,?)", 
             (newPlanetStar, newPlanetName, newPlanetSize, newPlanetTemp, newPlanetHumidity,newPlanetLife,newPlanetNote))
             sector.commit()
+    
+    sector.close()
 
+def editStarName(sectorName, originalName, newName):
+    sector = sqlite3.connect('sectors/' + sectorName)
+    cursor = sector.cursor()
+
+    cursor.execute("UPDATE planets SET star = ? WHERE star = ?", (newName, originalName))
+    sector.commit()
+
+    cursor.execute("UPDATE stars SET name = ? WHERE name = ?", (newName, originalName))
+    sector.commit()
+    sector.close()
+
+def editStarSize(sectorName, starName, size):
+
+    sector = sqlite3.connect('sectors/' + sectorName)
+    cursor = sector.cursor()
+
+    cursor.execute("UPDATE stars SET size = ? WHERE name = ?", (size, starName))
+
+    sector.commit()
+    sector.close()
+
+def nameIsValid(sectorName, newName):
+
+        sector = sqlite3.connect('sectors/' + sectorName)
+        cursor = sector.cursor()
+
+        cursor.execute('SELECT * FROM stars')
+        sectorStars = cursor.fetchall()
+
+        for star in sectorStars:
+            if newName == star[0]:
+                return False
+        if newName == "" or newName == "NA":
+            return False
+
+        sector.close()
+
+        return True
