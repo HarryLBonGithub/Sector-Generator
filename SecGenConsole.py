@@ -16,6 +16,7 @@ currentPlanet = ""
 #root window setup
 rootWindow = Tk()
 rootWindow.title("SecGen")
+rootWindow.minsize(width=580, height=500)
 
 #preload images
 welcomeImage = PhotoImage(file=r'images\Sec-Gen Filler.png')
@@ -30,6 +31,8 @@ systemStarIcon = PhotoImage(file=r'images\Planet_Star_64.png')
 smallPlanetIcon = PhotoImage(file=r'images\Planet_Small_64.png')
 midPlanetIcon = PhotoImage(file=r'images\Planet_Mid_64.png')
 largePlanetIcon =PhotoImage(file=r'images\Planet_Large_64.png')
+
+rootWindow.iconphoto(False,starFieldIcon)
 
 #functions
 def newSectorWindow():
@@ -46,15 +49,15 @@ def newSectorWindow():
         if sizeSelection.get() == "Small":
             gridNumber = 5
             starNumber = 5
-            SecGenFunctions.generateSector(newSecNameInput.get(), starNumber, gridNumber)
+            SecGenFunctions.generateSector(newSecNameInput.get(), starNumber, gridNumber, gridNumber)
         elif sizeSelection.get() == "Medium":
             gridNumber = 10
             starNumber = 10
-            SecGenFunctions.generateSector(newSecNameInput.get(), starNumber, gridNumber)
+            SecGenFunctions.generateSector(newSecNameInput.get(), starNumber, gridNumber, gridNumber)
         elif sizeSelection.get() == "Large":
             gridNumber = 15
             starNumber = 15
-            SecGenFunctions.generateSector(newSecNameInput.get(), starNumber, gridNumber)
+            SecGenFunctions.generateSector(newSecNameInput.get(), starNumber, gridNumber, gridNumber)
         
         clearMaps()
 
@@ -149,6 +152,11 @@ def openSectorWindow():
         messagebox.showerror(title="NO SECTORS", message="No Sector Databases to Load")
 
 def editStarWindow():
+    #BEFORE EDITING/ADDING STARS
+    #create a new table for sectors which includeds name and grid sizes
+    #current method for creating the sector map is based on the number of planets in a sector
+    #this will be thrown off if a user can add stars
+    #new map generation needs to be based off either a "ROW" and "COLUM" in a new table or a set "SIZE" parameter
     pass
 
 def editPlanetWindow():

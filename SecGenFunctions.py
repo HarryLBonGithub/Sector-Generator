@@ -5,7 +5,7 @@ import random
 tempStarNumber = 5
 tempGridSize = 10
 
-def generateSector(sectorName, numberOfStars, gridSize):
+def generateSector(sectorName, numberOfStars, rowSize, columnSize):
 
     usedStarNames = []
     usedSectorCoordinates = []
@@ -13,6 +13,14 @@ def generateSector(sectorName, numberOfStars, gridSize):
     #create database/sector
     sector = sqlite3.connect('sectors/' + sectorName +'.db')
     cursor = sector.cursor()
+
+    #create and populate sector_data table
+
+    cursor.execute("CREATE TABLE sector_data (name text, rows integer, columns integer)")
+    sector.commit()
+
+    cursor.execute("INSERT INTO sector_data VALUES (?,?,?)", (sectorName, rowSize, columnSize))
+    sector.commit()
 
     #create stars table
     cursor.execute("CREATE TABLE stars (name text,size text,row text,column text)")
@@ -29,18 +37,18 @@ def generateSector(sectorName, numberOfStars, gridSize):
 
         newStarSize = random.choice(SecGenSources.starSizes)
 
-        newRow = str(random.randrange(1, gridSize+1))
-        newColumn = str(random.randrange(1, gridSize+1))
+        newRow = str(random.randrange(1, rowSize+1))
+        newColumn = str(random.randrange(1, columnSize+1))
         newCoordinates = newRow + newColumn
 
         while newCoordinates in usedSectorCoordinates:
-            newRow = str(random.randrange(1, gridSize+1))
-            newColumn = str(random.randrange(1, gridSize+1))
+            newRow = str(random.randrange(1, rowSize+1))
+            newColumn = str(random.randrange(1, columnSize+1))
             newCoordinates = newRow + newColumn
         
         #print("Star: " + newStarName +" Size: " + newStarSize + " Sec X: " + newColumn + " Sec Y: " + newRow)
 
-        cursor.execute("INSERT INTO stars VALUES (?,?,?,?)", (newStarName, newStarSize, newRow,newColumn))
+        cursor.execute("INSERT INTO stars VALUES (?,?,?,?)", (newStarName, newStarSize, newRow, newColumn))
         sector.commit()
 
     #create planets table
