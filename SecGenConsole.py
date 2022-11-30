@@ -16,7 +16,7 @@ currentPlanet = ""
 #root window setup
 rootWindow = Tk()
 rootWindow.title("SecGen")
-rootWindow.minsize(width=580, height=500)
+rootWindow.minsize(width=620, height=500)
 
 #preload images
 welcomeImage = PhotoImage(file=r'images\Sec-Gen Filler.png')
@@ -151,13 +151,42 @@ def openSectorWindow():
         loadSectorWindow.destroy()
         messagebox.showerror(title="NO SECTORS", message="No Sector Databases to Load")
 
-def editStarWindow():
-    #BEFORE EDITING/ADDING STARS
-    #create a new table for sectors which includeds name and grid sizes
-    #current method for creating the sector map is based on the number of planets in a sector
-    #this will be thrown off if a user can add stars
-    #new map generation needs to be based off either a "ROW" and "COLUM" in a new table or a set "SIZE" parameter
-    pass
+def openEditStarWindow():
+    if currentSystem == "NA":
+        createStarWindow = Toplevel()
+        createStarWindow.title("Create Star")
+
+        createStarWindow.grab_set()
+
+        instructionLabel = Label(createStarWindow,text="Create star at sector coordinates [R:"+selectedRow+"/C:"+selectedColumn+"]")
+
+        nameEntryLabel = Label(createStarWindow, text="Name: ")
+        nameEntryField = Entry(createStarWindow, width=20)
+        sizeSelection = StringVar()
+        sizeSelection.set("Medium")
+        newStarSize = OptionMenu(createStarWindow, sizeSelection, "Small", "Medium", "Large")
+        planetCountLabel = Label(createStarWindow, text="Number of Planets")
+        planetCountEntryField = Entry(createStarWindow, width=20)
+        createButton = Button(createStarWindow, text="Create")
+
+        instructionLabel.grid(row=0,column=0)
+
+        nameEntryLabel.grid(row=1,column=0)
+        nameEntryField.grid(row=1,column=1)
+        newStarSize.grid(row=1,column=2)
+
+        planetCountLabel.grid(row=2,column=0)
+        planetCountEntryField.grid(row=2,column=1)
+        createButton.grid(row=2,column=2)
+
+
+        
+    elif currentSystem == "":
+        return
+
+    else:
+        editStarWindow = Toplevel()
+        editStarWindow.title("Edit Star")
 
 def editPlanetWindow():
     pass
@@ -169,16 +198,21 @@ def createSectorMap():
 
     sector = sqlite3.connect('sectors/' + currentSector)
     cursor = sector.cursor()
+
     cursor.execute('SELECT * FROM stars')
     sectorStars = cursor.fetchall()
 
-    numberOfStars = len(sectorStars)
+    cursor.execute('SELECT rows FROM sector_data')
+    numberOfRows = cursor.fetchone()[0]
+    
+    cursor.execute('SELECT columns FROM sector_data')
+    numberOfColumns = cursor.fetchone()[0]
 
     sectorMapButtons = []
     buttonCounter = 0
 
-    for r in range(numberOfStars):
-        for c in range(numberOfStars):
+    for r in range(numberOfRows):
+        for c in range(numberOfColumns):
             
             icon = starFieldIcon
             starName = 'NA'
@@ -303,7 +337,7 @@ welcomeLabel = Label(sectorMapFrame, image=welcomeImage)
 
 starInfoFrame = LabelFrame(rootWindow,text="Star Info", labelanchor=N)
 starInfoLabel = Label(starInfoFrame,text="NO STAR LOADED", justify=LEFT)
-editStarButton = Button(starInfoFrame, text="Edit Star", command=editStarWindow, height=4)
+editStarButton = Button(starInfoFrame, text="Edit Star", command=openEditStarWindow, height=4)
 
 systemMapFrame = LabelFrame(rootWindow, text="System Map", labelanchor=N)
 systemMapFillerImage = Label(systemMapFrame, image=systemMapFiller)
