@@ -6,7 +6,7 @@ tempStarNumber = 5
 tempGridSize = 10
 
 def generateSector(sectorName, numberOfStars, rowSize, columnSize):
-
+    
     usedStarNames = []
     usedSectorCoordinates = []
 
@@ -90,3 +90,29 @@ def generateSector(sectorName, numberOfStars, rowSize, columnSize):
 
     sector.commit()
     sector.close()
+
+def generateStarSystem(sectorName, starName, size, numberOfPlanets, row, column):
+    #connect to sector database
+
+    sector = sqlite3.connect('sectors/' + sectorName)
+    cursor = sector.cursor()
+
+    cursor.execute("INSERT INTO stars VALUES (?,?,?,?)", (starName, size, row, column))
+    sector.commit()
+
+    for planet in range(0, int(numberOfPlanets)):
+            
+            newPlanetStar = starName
+
+            newPlanetName = starName +"-"+SecGenSources.planetSuffixes[planet]
+
+            newPlanetSize = random.choice(SecGenSources.planetSizes)
+            newPlanetTemp = random.choice(SecGenSources.planetTemp)
+            newPlanetHumidity = random.choice(SecGenSources.planetHumidity)
+            newPlanetLife = random.choice(SecGenSources.planetLifeSigns)
+            newPlanetNote = random.choice(SecGenSources.planetNote)
+
+            cursor.execute("INSERT INTO planets VALUES (?,?,?,?,?,?,?)", 
+            (newPlanetStar, newPlanetName, newPlanetSize, newPlanetTemp, newPlanetHumidity,newPlanetLife,newPlanetNote))
+            sector.commit()
+

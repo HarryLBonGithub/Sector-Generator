@@ -152,6 +152,17 @@ def openSectorWindow():
         messagebox.showerror(title="NO SECTORS", message="No Sector Databases to Load")
 
 def openEditStarWindow():
+
+    def createStarCommand():
+        #NEEDS ENTRY ERROR CHECKING
+
+        SecGenFunctions.generateStarSystem(currentSector,nameEntryField.get(),sizeSelection.get(),planetCountEntryField.get(),selectedRow,selectedColumn)
+
+        clearMaps()
+        createSectorMap()
+        createStarWindow.grab_release()
+        createStarWindow.destroy()
+
     if currentSystem == "NA":
         createStarWindow = Toplevel()
         createStarWindow.title("Create Star")
@@ -163,11 +174,11 @@ def openEditStarWindow():
         nameEntryLabel = Label(createStarWindow, text="Name: ")
         nameEntryField = Entry(createStarWindow, width=20)
         sizeSelection = StringVar()
-        sizeSelection.set("Medium")
-        newStarSize = OptionMenu(createStarWindow, sizeSelection, "Small", "Medium", "Large")
+        sizeSelection.set("mid")
+        newStarSize = OptionMenu(createStarWindow, sizeSelection, "small", "mid", "large")
         planetCountLabel = Label(createStarWindow, text="Number of Planets")
         planetCountEntryField = Entry(createStarWindow, width=20)
-        createButton = Button(createStarWindow, text="Create")
+        createButton = Button(createStarWindow, text="Create", command=createStarCommand)
 
         instructionLabel.grid(row=0,column=0)
 
@@ -178,9 +189,7 @@ def openEditStarWindow():
         planetCountLabel.grid(row=2,column=0)
         planetCountEntryField.grid(row=2,column=1)
         createButton.grid(row=2,column=2)
-
-
-        
+ 
     elif currentSystem == "":
         return
 
