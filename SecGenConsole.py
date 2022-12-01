@@ -213,39 +213,46 @@ def openEditStarWindow():
         else:
             return False  
     
-    if currentSystem == "NA": #If clicking on empty space, open the 'create system' window
+    if currentSystem == "NA": #If editing empty space, opens a 'create system' window
         createStarWindow = Toplevel()
         createStarWindow.title("Create Star")
 
         createStarWindow.grab_set()
 
         #object creation
-        instructionLabel = Label(createStarWindow,text="Create star at sector coordinates [R:"+selectedRow+"/C:"+selectedColumn+"]")
+        instructionLabel = Label(createStarWindow,text="CREATE STAR AT COORDINATES [R:"+selectedRow+"/C:"+selectedColumn+"]")
 
-        nameEntryLabel = Label(createStarWindow, text="Name: ")
-        nameEntryField = Entry(createStarWindow, width=20)
+        nameEntryFrame = LabelFrame(createStarWindow, text="Name", padx=5, pady=5, labelanchor=N)
+        nameEntryField = Entry(nameEntryFrame, width=20)
+
+        planetCountFrame = LabelFrame(createStarWindow, text="Number of Planets", padx=5, pady=5, labelanchor=N)
+        planetCountEntryField = Entry(planetCountFrame, width=20)
+
+        sizeFrame = LabelFrame(createStarWindow, text="Size", padx=5,pady=5, labelanchor=N)
         sizeSelection = StringVar()
         sizeSelection.set("mid")
-        newStarSize = OptionMenu(createStarWindow, sizeSelection, "small", "mid", "large")
-        planetCountLabel = Label(createStarWindow, text="Number of Planets")
-        planetCountEntryField = Entry(createStarWindow, width=20)
-        createButton = Button(createStarWindow, text="Create", command=createStarCommand)
+        newStarSize = OptionMenu(sizeFrame, sizeSelection, "small", "mid", "large")
+
+        createButton = Button(createStarWindow, text="CREATE", command=createStarCommand)
 
         #object display
-        instructionLabel.grid(row=0,column=0)
+        instructionLabel.grid(row=0,column=0,padx=5,pady=5)
 
-        nameEntryLabel.grid(row=1,column=0)
-        nameEntryField.grid(row=1,column=1)
-        newStarSize.grid(row=1,column=2)
+        nameEntryFrame.grid(row=1,column=0,padx=5,pady=5)
+        nameEntryField.grid(row=0,column=0)
+        
+        planetCountFrame.grid(row=2,column=0,padx=5,pady=5)
+        planetCountEntryField.grid(row=0,column=0)
 
-        planetCountLabel.grid(row=2,column=0)
-        planetCountEntryField.grid(row=2,column=1)
-        createButton.grid(row=2,column=2)
+        sizeFrame.grid(row=3,column=0,padx=5,pady=5)
+        newStarSize.grid(row=0,column=0)
+
+        createButton.grid(row=4,column=0,padx=5,pady=5)
  
-    elif currentSystem == "":
+    elif currentSystem == "": #If no sector is open, does nothing
         return
 
-    else:
+    else: #If editing an existing star, opens an 'edit star' window
         
         editStarWindow = Toplevel()
         editStarWindow.title("Edit Star")
@@ -253,29 +260,32 @@ def openEditStarWindow():
         editStarWindow.grab_set()
         
         #object creation
-        instructionLabel = Label(editStarWindow,text="Edit star at sector coordinates [R:"+selectedRow+"/C:"+selectedColumn+"]")
-        nameEntryLabel = Label(editStarWindow, text="Name: ")
-        nameEntryField = Entry(editStarWindow, width=20)
-        nameCommitButton = Button(editStarWindow, text="Commit", command=editStarNameCommand)
+        instructionLabel = Label(editStarWindow,text="EDIT STAR AT COORDINATES [R:"+selectedRow+"/C:"+selectedColumn+"]")
 
+        nameEntryFrame = LabelFrame(editStarWindow, text="Edit Name", padx=5,pady=5, labelanchor=N)
+        nameEntryField = Entry(nameEntryFrame, width=20)
+        nameCommitButton = Button(nameEntryFrame, text="Commit", command=editStarNameCommand)
+
+        sizeEditFrame = LabelFrame(editStarWindow,text="Edit Size", padx=5,pady=5, labelanchor=N)
         sizeSelection = StringVar()
         sizeSelection.set("mid")
-        newStarSize = OptionMenu(editStarWindow, sizeSelection, "small", "mid", "large")
-        sizeCommitButton = Button(editStarWindow, text="Commit", command=editStarSizeCommand)
+        newStarSize = OptionMenu(sizeEditFrame, sizeSelection, "small", "mid", "large")
+        sizeCommitButton = Button(sizeEditFrame, text="Commit", command=editStarSizeCommand, anchor=E)
 
-        deleteSystemButton = Button(editStarWindow, text="DELETE SYSTEM", command=deleteStarSystemCommand)
+        deleteSystemButton = Button(editStarWindow, text="DELETE SYSTEM", bg='red', command=deleteStarSystemCommand)
 
         #object display
-        instructionLabel.grid(row=0, column=0, columnspan=3)
+        instructionLabel.grid(row=0, column=0, columnspan=3,pady=(0,5),padx=5)
 
-        nameEntryLabel.grid(row=1,column=0)
-        nameEntryField.grid(row=1,column=1)
-        nameCommitButton.grid(row=1,column=2)
+        nameEntryFrame.grid(row=1,column=0,pady=5,padx=5, sticky=W+E)
+        nameEntryField.grid(row=0,column=0)
+        nameCommitButton.grid(row=0,column=1)
 
-        newStarSize.grid(row=2,column=0)
-        sizeCommitButton.grid(row=2,column=1)
+        sizeEditFrame.grid(row=2,column=0,pady=5,padx=5, sticky=W+E)
+        newStarSize.grid(row=0,column=0)
+        sizeCommitButton.grid(row=0,column=1, padx=(60,0))
 
-        deleteSystemButton.grid(row=3,column=0,columnspan=3)
+        deleteSystemButton.grid(row=3,column=0,columnspan=3, pady=(5,10))
 
 def editPlanetWindow():
     pass
