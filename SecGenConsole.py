@@ -263,7 +263,7 @@ def openEditStarWindow():
         instructionLabel = Label(editStarWindow,text="EDIT STAR AT COORDINATES [R:"+selectedRow+"/C:"+selectedColumn+"]")
 
         nameEntryFrame = LabelFrame(editStarWindow, text="Edit Name", padx=5,pady=5, labelanchor=N)
-        nameEntryField = Entry(nameEntryFrame, width=20)
+        nameEntryField = Entry(nameEntryFrame, width=15)
         nameCommitButton = Button(nameEntryFrame, text="Commit", command=editStarNameCommand)
 
         sizeEditFrame = LabelFrame(editStarWindow,text="Edit Size", padx=5,pady=5, labelanchor=N)
@@ -278,7 +278,7 @@ def openEditStarWindow():
         instructionLabel.grid(row=0, column=0, columnspan=3,pady=(0,5),padx=5)
 
         nameEntryFrame.grid(row=1,column=0,pady=5,padx=5, sticky=W+E)
-        nameEntryField.grid(row=0,column=0)
+        nameEntryField.grid(row=0,column=0, padx=(0,33))
         nameCommitButton.grid(row=0,column=1)
 
         sizeEditFrame.grid(row=2,column=0,pady=5,padx=5, sticky=W+E)
@@ -287,7 +287,61 @@ def openEditStarWindow():
 
         deleteSystemButton.grid(row=3,column=0,columnspan=3, pady=(5,10))
 
-def editPlanetWindow():
+def openEditPlanetWindow():
+    global currentPlanet
+
+    if currentPlanet == "":
+        return
+
+    #create edit planet window
+    editPlanetWindow = Toplevel()
+    editPlanetWindow.title("Edit Planet")
+
+    editPlanetWindow.grab_set()
+
+    #object creation and display
+    instructionLabel = Label(editPlanetWindow,text="EDIT PLANET: " + currentPlanet)
+    instructionLabel.grid(row=0,column=0,padx=5,pady=5)
+    #-------------------1
+    nameEntryFrame = LabelFrame(editPlanetWindow, text="Name", labelanchor=N, padx=5, pady=5) 
+    nameEntryFrame.grid(row=1,column=0,padx=5,pady=5, sticky=W+E)
+
+    nameEntryField = Entry(nameEntryFrame, width=15).grid(row=0, column=0, padx=(0,33))
+    nameEditButton = Button(nameEntryFrame, text="Commit").grid(row=0,column=1)
+    #-------------------2
+    sizeFrame = LabelFrame(editPlanetWindow, text="Size", labelanchor=N, padx=5, pady=5)
+    sizeFrame.grid(row=2,column=0,pady=5,padx=5, sticky=W+E)
+
+    sizeSelection = StringVar()
+    sizeSelection.set("mid")
+    newStarSize = OptionMenu(sizeFrame, sizeSelection, "small", "mid", "large").grid(row=0,column=0)
+    sizeCommitButton = Button(sizeFrame, text="Commit", anchor=E).grid(row=0,column=1, padx=(60,0))
+    #-------------------3
+    tempEntryFrame = LabelFrame(editPlanetWindow, text="Average Temperature", labelanchor=N, padx=5, pady=5) 
+    tempEntryFrame.grid(row=3,column=0,padx=5,pady=5, sticky=W+E)
+
+    tempEntryField = Entry(tempEntryFrame, width=15).grid(row=0, column=0, padx=(0,33))
+    tempEditButton = Button(tempEntryFrame, text="Commit").grid(row=0,column=1)
+    #-------------------4
+    humidityEntryFrame = LabelFrame(editPlanetWindow, text="Humidity", labelanchor=N, padx=5, pady=5) 
+    humidityEntryFrame.grid(row=4,column=0,padx=5,pady=5, sticky=W+E)
+
+    humidityEntryField = Entry(humidityEntryFrame, width=15).grid(row=0, column=0, padx=(0,33))
+    humidityEditButton = Button(humidityEntryFrame, text="Commit").grid(row=0,column=1)
+    #-------------------5
+    lifeEntryFrame = LabelFrame(editPlanetWindow, text="Life Signs", labelanchor=N, padx=5, pady=5) 
+    lifeEntryFrame.grid(row=5,column=0,padx=5,pady=5, sticky=W+E)
+
+    lifeEntryField = Entry(lifeEntryFrame, width=15).grid(row=0, column=0, padx=(0,33))
+    lifeEditButton = Button(lifeEntryFrame, text="Commit").grid(row=0,column=1)
+    #-------------------6
+    noteEntryFrame = LabelFrame(editPlanetWindow, text="Note", labelanchor=N, padx=5, pady=5) 
+    noteEntryFrame.grid(row=6,column=0,padx=5,pady=5, sticky=W+E)
+
+    noteEntryField = Entry(noteEntryFrame, width=15).grid(row=0, column=0, padx=(0,33))
+    noteEditButton = Button(noteEntryFrame, text="Commit").grid(row=0,column=1)
+
+def addPlanetWindow():
     pass
 
 def createSectorMap():
@@ -452,7 +506,7 @@ systemMapFillerImage = Label(systemMapFrame, image=systemMapFiller)
 
 planetInfoFrame = LabelFrame(rootWindow,text="Planet Info", labelanchor=N)
 planetInfoLabel = Label(planetInfoFrame,text="NO PLANET LOADED", justify=LEFT)
-editPlanetButton = Button(planetInfoFrame, text="Edit Planet", command=editPlanetWindow, height=5)
+editPlanetButton = Button(planetInfoFrame, text="Edit Planet", command=openEditPlanetWindow, height=5)
 
 status = Label(rootWindow, text="Sec: " + currentSector + "/Sys: " + currentSystem + "/Pln: " + currentPlanet + "[R:" + selectedRow + "/C:" + selectedColumn + "]", relief=SUNKEN, anchor=E)
 
