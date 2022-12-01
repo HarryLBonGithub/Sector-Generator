@@ -12,6 +12,7 @@ selectedRow = "0"
 selectedColumn = "0"
 currentSystem = ""
 currentPlanet = ""
+currentPlanetOrbital = ""
 
 #root window setup
 rootWindow = Tk()
@@ -331,6 +332,9 @@ def createSectorMap():
 def createSystemMap(systemName, starSize, systemRow, systemColumn):
 
     global currentSystem
+    
+    resetCurrents()
+
     currentSystem = systemName
 
     planetInfoLabel.config(text="NO PLANET LOADED")
@@ -370,7 +374,7 @@ def createSystemMap(systemName, starSize, systemRow, systemColumn):
         elif planet[2] == 'large':
             icon = largePlanetIcon
         
-        newPlanetButton = Button(systemMapFrame, image = icon, bg = 'black', command = functools.partial(planetInfo, planet[1],planet[3],planet[4],planet[5], planet[6]))
+        newPlanetButton = Button(systemMapFrame, image = icon, bg = 'black', command = functools.partial(planetInfo, planet[1],planet[3],planet[4],planet[5], planet[6], planet[7]))
 
         planetButtons.append(newPlanetButton)
 
@@ -382,9 +386,13 @@ def createSystemMap(systemName, starSize, systemRow, systemColumn):
 
     sector.close()
 
-def planetInfo(name, temperature, humidity, life, note):
+def planetInfo(name, temperature, humidity, life, note, orbit):
     global currentPlanet
+    global currentPlanetOrbital
+
     currentPlanet = name
+
+    currentPlanetOrbital = str(orbit)
 
     formattedInfo ="NAME: " + name + "\n" + "TEMPERATURE: " + temperature + "\n" + "HUMIDITY: " + humidity +"\n" + "LIFE SIGNS: " + life + "\n" + "NOTE: " + note
     planetInfoLabel.config(text=formattedInfo)
@@ -392,18 +400,20 @@ def planetInfo(name, temperature, humidity, life, note):
     statusUpdate()
 
 def statusUpdate():
-    status.config(text="Sec: " + currentSector + "/Sys: " + currentSystem + "/Pln: " + currentPlanet + "[R:" + selectedRow + "/C:" + selectedColumn + "]", relief=SUNKEN, anchor=E)
+    status.config(text="Sec: " + currentSector + "/Sys: " + currentSystem + "/Pln: " + currentPlanet + "[R:" + selectedRow + "/C:" + selectedColumn + "]" + " POD: " + currentPlanetOrbital, relief=SUNKEN, anchor=E)
 
 def resetCurrents():
     global currentPlanet
     global currentSystem
     global selectedColumn
     global selectedRow
+    global currentPlanetOrbital
 
     currentPlanet = ""
     currentSystem = ""
     selectedColumn = "0"
     selectedRow = "0"
+    currentPlanetOrbital = ""
 
 def clearMaps():
     for previousItems in sectorMapFrame.winfo_children():

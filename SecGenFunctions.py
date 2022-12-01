@@ -60,7 +60,8 @@ def generateSector(sectorName, numberOfStars, rowSize, columnSize):
             average_temp text,
             humidity text,
             life text,
-            note text)
+            note text,
+            orbit integer)
         """)
     
     #populate planets table
@@ -72,6 +73,7 @@ def generateSector(sectorName, numberOfStars, rowSize, columnSize):
     #create planets for each star
     for star in sectorStars:
         numberOfPlanets = random.randrange(1,11)
+        orbitalDistance = 1
         for planet in range(0, numberOfPlanets):
             
             newPlanetStar = star
@@ -84,9 +86,10 @@ def generateSector(sectorName, numberOfStars, rowSize, columnSize):
             newPlanetLife = random.choice(SecGenSources.planetLifeSigns)
             newPlanetNote = random.choice(SecGenSources.planetNote)
 
-            cursor.execute("INSERT INTO planets VALUES (?,?,?,?,?,?,?)", 
-            (newPlanetStar, newPlanetName, newPlanetSize, newPlanetTemp, newPlanetHumidity,newPlanetLife,newPlanetNote))
+            cursor.execute("INSERT INTO planets VALUES (?,?,?,?,?,?,?,?)", 
+            (newPlanetStar, newPlanetName, newPlanetSize, newPlanetTemp, newPlanetHumidity,newPlanetLife,newPlanetNote,orbitalDistance))
             sector.commit()
+            orbitalDistance +=1
 
     sector.commit()
     sector.close()
