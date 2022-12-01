@@ -153,8 +153,6 @@ def openSectorWindow():
 
 def openEditStarWindow():
 
-    #needs error checking for number of planets created
-
     def createStarCommand():
         nameEntry = nameEntryField.get().strip()
         
@@ -190,7 +188,17 @@ def openEditStarWindow():
         editStarWindow.destroy()
 
     def deleteStarSystemCommand():
-        pass
+        
+        global currentSystem
+        global currentSector
+
+        confirmed = messagebox.askyesno(title="DELETE SECTOR", message="Are you sure you want to delete this star system? This action cannot be undone.")
+
+        if confirmed:
+            SecGenFunctions.deleteStarSystem(currentSector, currentSystem)
+            editCleanup()
+            editStarWindow.grab_release()
+            editStarWindow.destroy()
     
     def editCleanup():
         clearMaps()
@@ -254,7 +262,7 @@ def openEditStarWindow():
         newStarSize = OptionMenu(editStarWindow, sizeSelection, "small", "mid", "large")
         sizeCommitButton = Button(editStarWindow, text="Commit", command=editStarSizeCommand)
 
-        deleteSystemButton = Button(editStarWindow, text="DELETE SYSTEM")
+        deleteSystemButton = Button(editStarWindow, text="DELETE SYSTEM", command=deleteStarSystemCommand)
 
         #object display
         instructionLabel.grid(row=0, column=0, columnspan=3)

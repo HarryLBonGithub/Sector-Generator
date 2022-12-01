@@ -118,6 +118,20 @@ def generateStarSystem(sectorName, starName, size, numberOfPlanets, row, column)
     
     sector.close()
 
+def deleteStarSystem(sectorName, starName):
+    #connect to sector database
+
+    sector = sqlite3.connect('sectors/' + sectorName)
+    cursor = sector.cursor()
+
+    cursor.execute("DELETE FROM stars WHERE name = ? ", [starName])
+    sector.commit()
+
+    cursor.execute("DELETE FROM planets WHERE star = ?", [starName])
+    sector.commit()
+
+    sector.close()
+
 def editStarName(sectorName, originalName, newName):
     sector = sqlite3.connect('sectors/' + sectorName)
     cursor = sector.cursor()
