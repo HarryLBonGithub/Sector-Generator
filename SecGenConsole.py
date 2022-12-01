@@ -351,7 +351,7 @@ def createSystemMap(systemName, starSize, systemRow, systemColumn):
 
     sector = sqlite3.connect('sectors/' + currentSector)
     cursor = sector.cursor()
-    cursor.execute('SELECT * FROM planets WHERE star=?;', [systemName])
+    cursor.execute('SELECT * FROM planets WHERE star=? ORDER BY orbit', [systemName])
     systemPlanets = cursor.fetchall()
 
     planetButtons = []
