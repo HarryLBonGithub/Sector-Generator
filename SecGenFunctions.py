@@ -193,3 +193,21 @@ def nameIsValid(sectorName, newName):
         sector.close()
 
         return True
+
+def planetNameIsValid(sectorName, newName):
+
+        sector = sqlite3.connect('sectors/' + sectorName)
+        cursor = sector.cursor()
+
+        cursor.execute('SELECT * FROM planets')
+        sectorPlanets = cursor.fetchall()
+
+        for planet in sectorPlanets:
+            if newName == planet[1]:
+                return False
+        if newName == "" or newName == "NA":
+            return False
+
+        sector.close()
+
+        return True

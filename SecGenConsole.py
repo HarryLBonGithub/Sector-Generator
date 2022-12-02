@@ -200,9 +200,7 @@ def openEditStarWindow():
             editCleanup()
             editStarWindow.grab_release()
             editStarWindow.destroy()
-    
-    
-    
+
     def numberIsValid():
         if planetCountEntryField.get().isnumeric() and int(planetCountEntryField.get()) >= 0 and int(planetCountEntryField.get()) < 11:
             return True
@@ -288,11 +286,19 @@ def openEditPlanetWindow():
     global currentSector
 
     def editPlanetCommand(attribute, value):
-        SecGenFunctions.editPlanetValues(currentSector, attribute,currentPlanet,value)
+        
+        newValue = value.strip()
 
-        editCleanup()
-        editPlanetWindow.grab_release()
-        editPlanetWindow.destroy()
+        if attribute == "name" and SecGenFunctions.planetNameIsValid(currentSector,newValue) == False:
+            messagebox.showerror(title="NAME INVALID", message="Planet names must be unique and at least 1 character long.")
+        elif newValue == "":
+            messagebox.showerror(title="ENTRY INVALID", message="Entry must be at least 1 character long.")
+        else:
+            SecGenFunctions.editPlanetValues(currentSector, attribute,currentPlanet,newValue)
+
+            editCleanup()
+            editPlanetWindow.grab_release()
+            editPlanetWindow.destroy()
     
     if currentPlanet == "":
         return
@@ -507,6 +513,7 @@ def editCleanup():
         createSectorMap()
         resetCurrents()
         statusUpdate()
+
 #console object creation
 sectorMapFrame = LabelFrame(rootWindow, text="Sector Map: " + currentSector, labelanchor=N,padx=5, pady=5)
 welcomeLabel = Label(sectorMapFrame, image=welcomeImage)
