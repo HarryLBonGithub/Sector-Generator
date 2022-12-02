@@ -33,6 +33,8 @@ smallPlanetIcon = PhotoImage(file=r'images\Planet_Small_64.png')
 midPlanetIcon = PhotoImage(file=r'images\Planet_Mid_64.png')
 largePlanetIcon =PhotoImage(file=r'images\Planet_Large_64.png')
 
+addIcon =PhotoImage(file=r'images\Button_Add_64.png')
+
 rootWindow.iconphoto(False,starFieldIcon)
 
 #functions
@@ -325,7 +327,7 @@ def openEditPlanetWindow():
 
     sizeSelection = StringVar()
     sizeSelection.set("mid")
-    newStarSize = OptionMenu(sizeFrame, sizeSelection, "small", "mid", "large").grid(row=0,column=0)
+    newPlanetSize = OptionMenu(sizeFrame, sizeSelection, "small", "mid", "large").grid(row=0,column=0)
     sizeCommitButton = Button(sizeFrame, text="Commit", anchor=E, command=lambda: editPlanetCommand("size", sizeSelection.get())).grid(row=0,column=1, padx=(60,0))
     #-------------------3
     tempEntryFrame = LabelFrame(editPlanetWindow, text="Average Temperature", labelanchor=N, padx=5, pady=5) 
@@ -356,8 +358,59 @@ def openEditPlanetWindow():
     noteEntryField.grid(row=0, column=0, padx=(0,33))
     noteEditButton = Button(noteEntryFrame, text="Commit", command=lambda: editPlanetCommand("note", noteEntryField.get())).grid(row=0,column=1)
 
-def addPlanetWindow():
-    pass
+def openCreatePlanetWindow():
+    global currentSector
+    global currentSystem
+
+    #create edit planet window
+    createPlanetWindow = Toplevel()
+    createPlanetWindow.title("Create Planet")
+
+    createPlanetWindow.grab_set()
+
+    #object creation and display
+    instructionLabel = Label(createPlanetWindow,text="ADD PLANET TO SECTOR " + currentSystem)
+    instructionLabel.grid(row=0,column=0,padx=5,pady=5)
+    #-------------------1
+    nameEntryFrame = LabelFrame(createPlanetWindow, text="Name", labelanchor=N, padx=5, pady=5) 
+    nameEntryFrame.grid(row=1,column=0,padx=5,pady=5, sticky=W+E)
+
+    nameEntryField = Entry(nameEntryFrame, width=25)
+    nameEntryField.grid(row=0, column=0)
+    #-------------------2
+    sizeFrame = LabelFrame(createPlanetWindow, text="Size", labelanchor=N, padx=5, pady=5)
+    sizeFrame.grid(row=2,column=0,pady=5,padx=5, sticky=W+E)
+
+    sizeSelection = StringVar()
+    sizeSelection.set("mid")
+    newPlanetSize = OptionMenu(sizeFrame, sizeSelection, "small", "mid", "large").grid(row=0,column=0)
+    #-------------------3
+    tempEntryFrame = LabelFrame(createPlanetWindow, text="Average Temperature", labelanchor=N, padx=5, pady=5) 
+    tempEntryFrame.grid(row=3,column=0,padx=5,pady=5, sticky=W+E)
+
+    tempEntryField = Entry(tempEntryFrame, width=25)
+    tempEntryField.grid(row=0, column=0)
+    #-------------------4
+    humidityEntryFrame = LabelFrame(createPlanetWindow, text="Humidity", labelanchor=N, padx=5, pady=5) 
+    humidityEntryFrame.grid(row=4,column=0,padx=5,pady=5, sticky=W+E)
+
+    humidityEntryField = Entry(humidityEntryFrame, width=25)
+    humidityEntryField.grid(row=0, column=0)
+    #-------------------5
+    lifeEntryFrame = LabelFrame(createPlanetWindow, text="Life Signs", labelanchor=N, padx=5, pady=5) 
+    lifeEntryFrame.grid(row=5,column=0,padx=5,pady=5, sticky=W+E)
+
+    lifeEntryField = Entry(lifeEntryFrame, width=25)
+    lifeEntryField.grid(row=0, column=0)
+    #-------------------6
+    noteEntryFrame = LabelFrame(createPlanetWindow, text="Note", labelanchor=N, padx=5, pady=5) 
+    noteEntryFrame.grid(row=6,column=0,padx=5,pady=5, sticky=W+E)
+
+    noteEntryField = Entry(noteEntryFrame, width=25)
+    noteEntryField.grid(row=0, column=0)
+    #-------------------7
+    createPlanetButton = Button(createPlanetWindow, text="Create").grid(row=7, column=0,padx=5,pady=5,sticky=W+E)
+
 
 def createSectorMap():
 
@@ -461,6 +514,10 @@ def createSystemMap(systemName, starSize, systemRow, systemColumn):
 
         counter += 1
 
+
+    createPlanetButton = Button(systemMapFrame, image=addIcon, bg='black', command=openCreatePlanetWindow)
+    createPlanetButton.grid(row=0,column=counter+1, padx=10)
+
     statusUpdate()
 
     sector.close()
@@ -522,7 +579,7 @@ starInfoFrame = LabelFrame(rootWindow,text="Star Info", labelanchor=N)
 starInfoLabel = Label(starInfoFrame,text="NO STAR LOADED", justify=LEFT)
 editStarButton = Button(starInfoFrame, text="Edit Star", command=openEditStarWindow, height=4)
 
-systemMapFrame = LabelFrame(rootWindow, text="System Map", labelanchor=N)
+systemMapFrame = LabelFrame(rootWindow, text="System Map", labelanchor=N, padx=5, pady=5)
 systemMapFillerImage = Label(systemMapFrame, image=systemMapFiller)
 
 planetInfoFrame = LabelFrame(rootWindow,text="Planet Info", labelanchor=N)
