@@ -156,6 +156,26 @@ def editStarSize(sectorName, starName, size):
     sector.commit()
     sector.close()
 
+def editPlanetValues(sectorName, attribute, planet, value):
+    sector = sqlite3.connect('sectors/' + sectorName)
+    cursor = sector.cursor()
+    
+    if attribute == "name":
+        cursor.execute("UPDATE planets SET name = ? WHERE name = ?", (value,planet))
+    elif attribute == "size":
+        cursor.execute("UPDATE planets SET size = ? WHERE name = ?", (value,planet))
+    elif attribute == "temp":
+        cursor.execute("UPDATE planets SET average_temp = ? WHERE name = ?", (value,planet))
+    elif attribute == "humidity":
+        cursor.execute("UPDATE planets SET humidity = ? WHERE name = ?", (value,planet))
+    elif attribute == "life":
+        cursor.execute("UPDATE planets SET life = ? WHERE name = ?", (value,planet))
+    elif attribute == "note":
+        cursor.execute("UPDATE planets SET note = ? WHERE name = ?", (value,planet))
+    sector.commit()
+    sector.close()
+
+
 def nameIsValid(sectorName, newName):
 
         sector = sqlite3.connect('sectors/' + sectorName)

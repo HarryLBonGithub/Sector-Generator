@@ -201,11 +201,7 @@ def openEditStarWindow():
             editStarWindow.grab_release()
             editStarWindow.destroy()
     
-    def editCleanup():
-        clearMaps()
-        createSectorMap()
-        resetCurrents()
-        statusUpdate()
+    
     
     def numberIsValid():
         if planetCountEntryField.get().isnumeric() and int(planetCountEntryField.get()) >= 0 and int(planetCountEntryField.get()) < 11:
@@ -289,7 +285,15 @@ def openEditStarWindow():
 
 def openEditPlanetWindow():
     global currentPlanet
+    global currentSector
 
+    def editPlanetCommand(attribute, value):
+        SecGenFunctions.editPlanetValues(currentSector, attribute,currentPlanet,value)
+
+        editCleanup()
+        editPlanetWindow.grab_release()
+        editPlanetWindow.destroy()
+    
     if currentPlanet == "":
         return
 
@@ -306,8 +310,9 @@ def openEditPlanetWindow():
     nameEntryFrame = LabelFrame(editPlanetWindow, text="Name", labelanchor=N, padx=5, pady=5) 
     nameEntryFrame.grid(row=1,column=0,padx=5,pady=5, sticky=W+E)
 
-    nameEntryField = Entry(nameEntryFrame, width=15).grid(row=0, column=0, padx=(0,33))
-    nameEditButton = Button(nameEntryFrame, text="Commit").grid(row=0,column=1)
+    nameEntryField = Entry(nameEntryFrame, width=15)
+    nameEntryField.grid(row=0, column=0, padx=(0,33))
+    nameEditButton = Button(nameEntryFrame, text="Commit", command=lambda: editPlanetCommand("name", nameEntryField.get())).grid(row=0,column=1)
     #-------------------2
     sizeFrame = LabelFrame(editPlanetWindow, text="Size", labelanchor=N, padx=5, pady=5)
     sizeFrame.grid(row=2,column=0,pady=5,padx=5, sticky=W+E)
@@ -315,31 +320,35 @@ def openEditPlanetWindow():
     sizeSelection = StringVar()
     sizeSelection.set("mid")
     newStarSize = OptionMenu(sizeFrame, sizeSelection, "small", "mid", "large").grid(row=0,column=0)
-    sizeCommitButton = Button(sizeFrame, text="Commit", anchor=E).grid(row=0,column=1, padx=(60,0))
+    sizeCommitButton = Button(sizeFrame, text="Commit", anchor=E, command=lambda: editPlanetCommand("size", sizeSelection.get())).grid(row=0,column=1, padx=(60,0))
     #-------------------3
     tempEntryFrame = LabelFrame(editPlanetWindow, text="Average Temperature", labelanchor=N, padx=5, pady=5) 
     tempEntryFrame.grid(row=3,column=0,padx=5,pady=5, sticky=W+E)
 
-    tempEntryField = Entry(tempEntryFrame, width=15).grid(row=0, column=0, padx=(0,33))
-    tempEditButton = Button(tempEntryFrame, text="Commit").grid(row=0,column=1)
+    tempEntryField = Entry(tempEntryFrame, width=15)
+    tempEntryField.grid(row=0, column=0, padx=(0,33))
+    tempEditButton = Button(tempEntryFrame, text="Commit", command=lambda: editPlanetCommand("temp", tempEntryField.get())).grid(row=0,column=1)
     #-------------------4
     humidityEntryFrame = LabelFrame(editPlanetWindow, text="Humidity", labelanchor=N, padx=5, pady=5) 
     humidityEntryFrame.grid(row=4,column=0,padx=5,pady=5, sticky=W+E)
 
-    humidityEntryField = Entry(humidityEntryFrame, width=15).grid(row=0, column=0, padx=(0,33))
-    humidityEditButton = Button(humidityEntryFrame, text="Commit").grid(row=0,column=1)
+    humidityEntryField = Entry(humidityEntryFrame, width=15)
+    humidityEntryField.grid(row=0, column=0, padx=(0,33))
+    humidityEditButton = Button(humidityEntryFrame, text="Commit", command=lambda: editPlanetCommand("humidity", humidityEntryField.get())).grid(row=0,column=1)
     #-------------------5
     lifeEntryFrame = LabelFrame(editPlanetWindow, text="Life Signs", labelanchor=N, padx=5, pady=5) 
     lifeEntryFrame.grid(row=5,column=0,padx=5,pady=5, sticky=W+E)
 
-    lifeEntryField = Entry(lifeEntryFrame, width=15).grid(row=0, column=0, padx=(0,33))
-    lifeEditButton = Button(lifeEntryFrame, text="Commit").grid(row=0,column=1)
+    lifeEntryField = Entry(lifeEntryFrame, width=15)
+    lifeEntryField.grid(row=0, column=0, padx=(0,33))
+    lifeEditButton = Button(lifeEntryFrame, text="Commit", command=lambda: editPlanetCommand("life", lifeEntryField.get())).grid(row=0,column=1)
     #-------------------6
     noteEntryFrame = LabelFrame(editPlanetWindow, text="Note", labelanchor=N, padx=5, pady=5) 
     noteEntryFrame.grid(row=6,column=0,padx=5,pady=5, sticky=W+E)
 
-    noteEntryField = Entry(noteEntryFrame, width=15).grid(row=0, column=0, padx=(0,33))
-    noteEditButton = Button(noteEntryFrame, text="Commit").grid(row=0,column=1)
+    noteEntryField = Entry(noteEntryFrame, width=15)
+    noteEntryField.grid(row=0, column=0, padx=(0,33))
+    noteEditButton = Button(noteEntryFrame, text="Commit", command=lambda: editPlanetCommand("note", noteEntryField.get())).grid(row=0,column=1)
 
 def addPlanetWindow():
     pass
@@ -493,6 +502,11 @@ def clearMaps():
     systemMapFillerImage = Label(systemMapFrame, image=systemMapFiller)
     systemMapFillerImage.grid(row=0,column=0)
 
+def editCleanup():
+        clearMaps()
+        createSectorMap()
+        resetCurrents()
+        statusUpdate()
 #console object creation
 sectorMapFrame = LabelFrame(rootWindow, text="Sector Map: " + currentSector, labelanchor=N,padx=5, pady=5)
 welcomeLabel = Label(sectorMapFrame, image=welcomeImage)
