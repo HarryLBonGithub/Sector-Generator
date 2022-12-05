@@ -397,8 +397,12 @@ def openCreatePlanetWindow():
     global currentSector
     global currentSystem
 
-    def createPlanetCommand(sector, system, name, temp, humidity, life, note, orbit):
-        pass
+    def createPlanetCommand():
+        SecGenFunctions.createPlanet(currentSector,currentSystem,nameEntryField.get(),sizeSelection.get(),tempEntryField.get(),humidityEntryField.get(),lifeEntryField.get(),noteEntryField.get(),int(orbitEntryField.get()))
+
+        editCleanup()
+        createPlanetWindow.grab_release()
+        createPlanetWindow.destroy()
 
     #create edit planet window
     createPlanetWindow = Toplevel()
@@ -447,7 +451,13 @@ def openCreatePlanetWindow():
     noteEntryField = Entry(noteEntryFrame, width=25)
     noteEntryField.grid(row=0, column=0)
     #-------------------7
-    createPlanetButton = Button(createPlanetWindow, text="Create").grid(row=7, column=0,padx=5,pady=5,sticky=W+E)
+    orbitEntryFrame = LabelFrame(createPlanetWindow, text="Orbital Distance", labelanchor=N, padx=5, pady=5) 
+    orbitEntryFrame.grid(row=7,column=0,padx=5,pady=5, sticky=W+E)
+
+    orbitEntryField = Entry(orbitEntryFrame, width=15)
+    orbitEntryField.grid(row=0, column=0, padx=(0,33))
+    #-------------------8
+    createPlanetButton = Button(createPlanetWindow, text="Create", command=createPlanetCommand).grid(row=8, column=0,padx=5,pady=5,sticky=W+E)
 
 def createSectorMap():
 

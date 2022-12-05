@@ -178,6 +178,20 @@ def editStarSize(sectorName, starName, size):
     sector.commit()
     sector.close()
 
+def createPlanet(sectorName, system, planetName, size, temp, humidity, life, note, orbit):
+
+    sector = sqlite3.connect('sectors/' + sectorName)
+    cursor = sector.cursor()
+
+    cursor.execute('UPDATE planets SET orbit = orbit + 1 WHERE (star = ? and orbit >= ?)',
+    (system, orbit))
+    sector.commit()
+
+    cursor.execute("INSERT INTO planets VALUES (?,?,?,?,?,?,?,?)", 
+    (system, planetName, size, temp, humidity, life,note,orbit))
+    sector.commit()
+    sector.close()
+
 def editPlanetValues(sectorName, attribute, planet, value):
     sector = sqlite3.connect('sectors/' + sectorName)
     cursor = sector.cursor()
@@ -267,3 +281,4 @@ def systemPlanetCount(sectorName, system):
 
     return len(sectorPlanets)
 
+createPlanet("alpha.db","Mawst", "New-Mawst", "small", "warm", "moist", "some", "NA", 3)
