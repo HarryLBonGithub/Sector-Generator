@@ -70,6 +70,8 @@ def generateSector(sectorName, numberOfStars, rowSize, columnSize):
     cursor.execute("SELECT name FROM stars")
     sectorStars = [i[0] for i in cursor.fetchall()]
 
+    usedNotes = []
+
     #create planets for each star
     for star in sectorStars:
         numberOfPlanets = random.randrange(1,11)
@@ -84,7 +86,14 @@ def generateSector(sectorName, numberOfStars, rowSize, columnSize):
             newPlanetTemp = random.choice(SecGenSources.planetTemp)
             newPlanetHumidity = random.choice(SecGenSources.planetHumidity)
             newPlanetLife = random.choice(SecGenSources.planetLifeSigns)
-            newPlanetNote = random.choice(SecGenSources.planetNote)
+
+
+            
+            noteChance = random.randint(1,4)
+            if noteChance == 1:
+                newPlanetNote = random.choice(SecGenSources.planetNote)
+            else:
+                newPlanetNote = "NA"
 
             cursor.execute("INSERT INTO planets VALUES (?,?,?,?,?,?,?,?)", 
             (newPlanetStar, newPlanetName, newPlanetSize, newPlanetTemp, newPlanetHumidity,newPlanetLife,newPlanetNote,orbitalDistance))
@@ -115,6 +124,13 @@ def generateStarSystem(sectorName, starName, size, numberOfPlanets, row, column)
             newPlanetTemp = random.choice(SecGenSources.planetTemp)
             newPlanetHumidity = random.choice(SecGenSources.planetHumidity)
             newPlanetLife = random.choice(SecGenSources.planetLifeSigns)
+
+            noteChance = random.randint(1,4)
+            if noteChance == 1:
+                newPlanetNote = random.choice(SecGenSources.planetNote)
+            else:
+                newPlanetNote = "NA"
+
             newPlanetNote = random.choice(SecGenSources.planetNote)
 
             cursor.execute("INSERT INTO planets VALUES (?,?,?,?,?,?,?,?)", 
