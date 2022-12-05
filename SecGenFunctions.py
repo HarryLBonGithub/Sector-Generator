@@ -103,6 +103,8 @@ def generateStarSystem(sectorName, starName, size, numberOfPlanets, row, column)
     cursor.execute("INSERT INTO stars VALUES (?,?,?,?)", (starName, size, row, column))
     sector.commit()
 
+    orbitalDistance = 1
+
     for planet in range(0, int(numberOfPlanets)):
             
             newPlanetStar = starName
@@ -115,9 +117,10 @@ def generateStarSystem(sectorName, starName, size, numberOfPlanets, row, column)
             newPlanetLife = random.choice(SecGenSources.planetLifeSigns)
             newPlanetNote = random.choice(SecGenSources.planetNote)
 
-            cursor.execute("INSERT INTO planets VALUES (?,?,?,?,?,?,?)", 
-            (newPlanetStar, newPlanetName, newPlanetSize, newPlanetTemp, newPlanetHumidity,newPlanetLife,newPlanetNote))
+            cursor.execute("INSERT INTO planets VALUES (?,?,?,?,?,?,?,?)", 
+            (newPlanetStar, newPlanetName, newPlanetSize, newPlanetTemp, newPlanetHumidity,newPlanetLife,newPlanetNote,orbitalDistance))
             sector.commit()
+            orbitalDistance +=1
     
     sector.close()
 
@@ -175,6 +178,29 @@ def editPlanetValues(sectorName, attribute, planet, value):
     sector.commit()
     sector.close()
 
+def editPlanetOrbial(sectorName, planet, system, startingOrbit, newOrbit):
+    sector = sqlite3.connect('sectors/' + sectorName)
+    cursor = sector.cursor()
+
+    if startingOrbit < newOrbit:
+        cursor.execute('UPDATE planets SET orbit = orbit - 1 WHERE (star = ? AND orbit > ? and orbit <= ?)',
+        (system,startingOrbit,newOrbit))
+        sector.commit()
+
+        cursor.execute('UPDATE planets SET orbit = ? WHERE name = ?',
+        (newOrbit, planet))
+        sector.commit()
+        sector.close()
+
+    if startingOrbit > newOrbit:
+        cursor.execute('UPDATE planets SET orbit = orbit + 1 WHERE (star = ? AND orbit < ? and orbit >= ?)',
+        (system,startingOrbit,newOrbit))
+        sector.commit()
+
+        cursor.execute('UPDATE planets SET orbit = ? WHERE name = ?',
+        (newOrbit, planet))
+        sector.commit()
+        sector.close()
 
 def nameIsValid(sectorName, newName):
 
@@ -211,3 +237,12 @@ def planetNameIsValid(sectorName, newName):
         sector.close()
 
         return True
+
+def systemPlanetCount(sectorName, system):
+    sector = sqlite3.connect('sectors/' + sectorName)
+    cursor = sector.cursor()
+
+    cursor.execute('SELECT * FROM planets WHERE star = ?', [system])
+    sectorPlanets = cursor.fetchall()
+
+    return len(sectorPlanets)

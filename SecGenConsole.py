@@ -302,6 +302,23 @@ def openEditPlanetWindow():
             editPlanetWindow.grab_release()
             editPlanetWindow.destroy()
     
+    def editOrbitalCommand(value):
+
+        numberOfPlanets = SecGenFunctions.systemPlanetCount(currentSector,currentSystem)
+
+        if int(value) == currentPlanetOrbital:
+            return
+
+        elif int(value) > numberOfPlanets or int(value) < 1:
+            messagebox.showerror(title="ORBIT INVALID", message="Orbial distance cannot be less than 1 or exceed number of planets in the system.")
+
+        else:
+            SecGenFunctions.editPlanetOrbial(currentSector, currentPlanet, currentSystem,int(currentPlanetOrbital),int(value))
+            editCleanup()
+            editPlanetWindow.grab_release()
+            editPlanetWindow.destroy()
+
+    #don't open if there is no planet selected
     if currentPlanet == "":
         return
 
@@ -357,10 +374,20 @@ def openEditPlanetWindow():
     noteEntryField = Entry(noteEntryFrame, width=15)
     noteEntryField.grid(row=0, column=0, padx=(0,33))
     noteEditButton = Button(noteEntryFrame, text="Commit", command=lambda: editPlanetCommand("note", noteEntryField.get())).grid(row=0,column=1)
+    #-------------------7
+    orbitEntryFrame = LabelFrame(editPlanetWindow, text="Orbital Distance", labelanchor=N, padx=5, pady=5) 
+    orbitEntryFrame.grid(row=7,column=0,padx=5,pady=5, sticky=W+E)
+
+    orbitEntryField = Entry(orbitEntryFrame, width=15)
+    orbitEntryField.grid(row=0, column=0, padx=(0,33))
+    orbitEditButton = Button(orbitEntryFrame, text="Commit", command=lambda: editOrbitalCommand(orbitEntryField.get())).grid(row=0,column=1)
 
 def openCreatePlanetWindow():
     global currentSector
     global currentSystem
+
+    def createPlanetCommand(sector, system, name, temp, humidity, life, note, orbit):
+        pass
 
     #create edit planet window
     createPlanetWindow = Toplevel()
@@ -410,7 +437,6 @@ def openCreatePlanetWindow():
     noteEntryField.grid(row=0, column=0)
     #-------------------7
     createPlanetButton = Button(createPlanetWindow, text="Create").grid(row=7, column=0,padx=5,pady=5,sticky=W+E)
-
 
 def createSectorMap():
 
