@@ -318,6 +318,15 @@ def openEditPlanetWindow():
             editPlanetWindow.grab_release()
             editPlanetWindow.destroy()
 
+    def deletePlanetCommand():
+        confirmed = messagebox.askyesno(title="DELETE PLANET", message="Are you sure you want to delete this planet? This action cannot be undone.")
+
+        if confirmed:
+            SecGenFunctions.deletePlanet(currentSector,currentPlanet)
+            editCleanup()
+            editPlanetWindow.grab_release()
+            editPlanetWindow.destroy()
+
     #don't open if there is no planet selected
     if currentPlanet == "":
         return
@@ -381,6 +390,8 @@ def openEditPlanetWindow():
     orbitEntryField = Entry(orbitEntryFrame, width=15)
     orbitEntryField.grid(row=0, column=0, padx=(0,33))
     orbitEditButton = Button(orbitEntryFrame, text="Commit", command=lambda: editOrbitalCommand(orbitEntryField.get())).grid(row=0,column=1)
+    #-------------------8
+    deletePlanetButton = Button(editPlanetWindow, text="DELETE PLANET", bg='red', command=deletePlanetCommand).grid(row=8,column=0,pady=5)
 
 def openCreatePlanetWindow():
     global currentSector

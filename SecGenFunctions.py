@@ -138,6 +138,25 @@ def deleteStarSystem(sectorName, starName):
 
     sector.close()
 
+def deletePlanet(sectorName, planet):
+    sector = sqlite3.connect('sectors/' + sectorName)
+    cursor = sector.cursor()
+
+    cursor.execute("SELECT * FROM planets WHERE name = ?", [planet])
+    sector.commit()
+    targetOrbit = cursor.fetchone()[7]
+    cursor.execute("SELECT * FROM planets WHERE name = ?", [planet])
+    sector.commit()
+    systemName = cursor.fetchone()[0]
+
+    cursor.execute('UPDATE planets SET orbit = orbit-1 WHERE (star = ? and orbit > ?)',
+    (systemName, targetOrbit))
+
+    cursor.execute("DELETE FROM planets WHERE name = ?", [planet])
+    sector.commit()
+
+    sector.close()
+
 def editStarName(sectorName, originalName, newName):
     sector = sqlite3.connect('sectors/' + sectorName)
     cursor = sector.cursor()
@@ -239,6 +258,7 @@ def planetNameIsValid(sectorName, newName):
         return True
 
 def systemPlanetCount(sectorName, system):
+
     sector = sqlite3.connect('sectors/' + sectorName)
     cursor = sector.cursor()
 
@@ -246,3 +266,4 @@ def systemPlanetCount(sectorName, system):
     sectorPlanets = cursor.fetchall()
 
     return len(sectorPlanets)
+
