@@ -398,11 +398,28 @@ def openCreatePlanetWindow():
     global currentSystem
 
     def createPlanetCommand():
-        SecGenFunctions.createPlanet(currentSector,currentSystem,nameEntryField.get(),sizeSelection.get(),tempEntryField.get(),humidityEntryField.get(),lifeEntryField.get(),noteEntryField.get(),int(orbitEntryField.get()))
+        if SecGenFunctions.planetNameIsValid(currentSector, nameEntryField.get().strip()) == False:
+            messagebox.showerror(title="NAME INVALID", message="Planet names must be unique and at least 1 character long.")
+        elif tempEntryField.get().strip() == "":
+            messagebox.showerror(title="TEMP INVALID", message="Temperature entry cannot be blank.")
+        elif humidityEntryField.get().strip() == "":
+            messagebox.showerror(title="HUMIDITY INVALID", message="Humidity entry cannot be blank.")
+        elif lifeEntryField.get().strip() == "":
+            messagebox.showerror(title="LIFE SIGNS INVALID", message="Life Signs entry cannot be blank.")
+        elif noteEntryField.get().strip() == "":
+            messagebox.showerror(title="NOTE INVALID", message="Note entry cannot be blank.")
+        elif orbitEntryField.get().isnumeric() == False:
+            messagebox.showerror(title="ORBIT INVALID", message="Orbial distance must be an integer.")
+        elif orbitEntryField.get().strip() == "":
+            messagebox.showerror(title="ORBIT INVALID", message="Orbital distance entry cannot be blank.")
+        elif int(orbitEntryField.get()) > SecGenFunctions.systemPlanetCount(currentSector,currentSystem)+1 or int(orbitEntryField.get()) < 1:
+            messagebox.showerror(title="ORBIT INVALID", message="Orbial distance cannot be less than 1 or exceed number of planets in the system.")
+        else:
+            SecGenFunctions.createPlanet(currentSector,currentSystem,nameEntryField.get(),sizeSelection.get(),tempEntryField.get(),humidityEntryField.get(),lifeEntryField.get(),noteEntryField.get(),int(orbitEntryField.get()))
 
-        editCleanup()
-        createPlanetWindow.grab_release()
-        createPlanetWindow.destroy()
+            editCleanup()
+            createPlanetWindow.grab_release()
+            createPlanetWindow.destroy()
 
     #create edit planet window
     createPlanetWindow = Toplevel()
@@ -418,6 +435,7 @@ def openCreatePlanetWindow():
     nameEntryFrame.grid(row=1,column=0,padx=5,pady=5, sticky=W+E)
 
     nameEntryField = Entry(nameEntryFrame, width=25)
+    nameEntryField.insert(0,currentSystem + "-Neo")
     nameEntryField.grid(row=0, column=0)
     #-------------------2
     sizeFrame = LabelFrame(createPlanetWindow, text="Size", labelanchor=N, padx=5, pady=5)
@@ -431,30 +449,35 @@ def openCreatePlanetWindow():
     tempEntryFrame.grid(row=3,column=0,padx=5,pady=5, sticky=W+E)
 
     tempEntryField = Entry(tempEntryFrame, width=25)
+    tempEntryField.insert(0,"frozen")
     tempEntryField.grid(row=0, column=0)
     #-------------------4
     humidityEntryFrame = LabelFrame(createPlanetWindow, text="Humidity", labelanchor=N, padx=5, pady=5) 
     humidityEntryFrame.grid(row=4,column=0,padx=5,pady=5, sticky=W+E)
 
     humidityEntryField = Entry(humidityEntryFrame, width=25)
+    humidityEntryField.insert(0,"dry")
     humidityEntryField.grid(row=0, column=0)
     #-------------------5
     lifeEntryFrame = LabelFrame(createPlanetWindow, text="Life Signs", labelanchor=N, padx=5, pady=5) 
     lifeEntryFrame.grid(row=5,column=0,padx=5,pady=5, sticky=W+E)
 
     lifeEntryField = Entry(lifeEntryFrame, width=25)
+    lifeEntryField.insert(0,"lifeless")
     lifeEntryField.grid(row=0, column=0)
     #-------------------6
     noteEntryFrame = LabelFrame(createPlanetWindow, text="Note", labelanchor=N, padx=5, pady=5) 
     noteEntryFrame.grid(row=6,column=0,padx=5,pady=5, sticky=W+E)
 
     noteEntryField = Entry(noteEntryFrame, width=25)
+    noteEntryField.insert(0,"NA")
     noteEntryField.grid(row=0, column=0)
     #-------------------7
     orbitEntryFrame = LabelFrame(createPlanetWindow, text="Orbital Distance", labelanchor=N, padx=5, pady=5) 
     orbitEntryFrame.grid(row=7,column=0,padx=5,pady=5, sticky=W+E)
 
     orbitEntryField = Entry(orbitEntryFrame, width=15)
+    orbitEntryField.insert(0, str(SecGenFunctions.systemPlanetCount(currentSector,currentSystem)+1))
     orbitEntryField.grid(row=0, column=0, padx=(0,33))
     #-------------------8
     createPlanetButton = Button(createPlanetWindow, text="Create", command=createPlanetCommand).grid(row=8, column=0,padx=5,pady=5,sticky=W+E)

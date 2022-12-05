@@ -281,4 +281,4 @@ def systemPlanetCount(sectorName, system):
 
     return len(sectorPlanets)
 
-createPlanet("alpha.db","Mawst", "New-Mawst", "small", "warm", "moist", "some", "NA", 3)
+
