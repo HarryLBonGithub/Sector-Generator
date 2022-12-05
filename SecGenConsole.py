@@ -546,17 +546,16 @@ def createSystemMap(systemName, starSize, systemRow, systemColumn):
     for previousItems in systemMapFrame.winfo_children():
         previousItems.destroy()
 
+    global selectedRow
+    global selectedColumn
+    selectedRow = systemRow
+    selectedColumn = systemColumn
+
     if systemName == "NA":
         systemMapFillerImage = Label(systemMapFrame, image=systemMapFiller)
         systemMapFillerImage.grid(row=0,column=0)
         statusUpdate()
         return
-
-
-    global selectedRow
-    global selectedColumn
-    selectedRow = systemRow
-    selectedColumn = systemColumn
 
     sector = sqlite3.connect('sectors/' + currentSector)
     cursor = sector.cursor()
